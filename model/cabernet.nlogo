@@ -7,22 +7,29 @@ to setup
   let some-state-2 ["state-1" "state-4" "state-5"]
   let some-state-3 ["state-1" "state-2" "state-6"]
   let some-state-4 ["state-1" "state-2" "state-3"]
-  let some-outcome ["install"]
-  let some-decision [true]
+  let some-outcome-1 ["install-1"]
+  let some-outcome-2 ["install-2"]
+  let some-outcome-3 ["install-3"]
+  let some-outcome-4 ["install-4"]
+  let some-decision-1 [true true true]
+  let some-decision-2 [true true false]
+  let some-decision-3 [true false true]
+  let some-decision-4 [true false false]
 
-  let some-case-1 cbr:add case-base some-state-1 some-outcome some-decision
-  let some-case-2 cbr:add case-base some-state-2 some-outcome some-decision
-  let some-case-3 cbr:add case-base some-state-3 some-outcome some-decision
+  reset-ticks
+
+  tick
+  let some-case-1 cbr:add case-base some-state-1 some-outcome-1 some-decision-1
+  tick
+  let some-case-2 cbr:add case-base some-state-2 some-outcome-2 some-decision-2
+  tick
+  let some-case-3 cbr:add case-base some-state-3 some-outcome-3 some-decision-3
 
   show (word "testing responses yes = " cbr:yes " no = " cbr:no " equal = " cbr:equal " and invalid = " cbr:invalid )
   show (word "testing cbr:decision " cbr:decision case-base some-case-1)
   show (word "testing cbr:state " cbr:state case-base some-case-1)
   show (word "testing cbr:outcome " cbr:outcome case-base some-case-1)
   show (word "testing cbr:time " cbr:time case-base some-case-1)
-  wait 5
-  cbr:set-time case-base some-case-1 date-and-time
-
-  show (word "testing new cbr:time " cbr:time case-base some-case-1)
 
   ; Lambda
 
@@ -31,6 +38,11 @@ to setup
   show (word "cbr:closer - " cbr:closer case-base some-case-1 some-case-2 some-case-3)
   show (word "cbr:comparable - " cbr:comparable case-base some-case-1 some-case-2 some-case-3)
   show (word "cbr:same - " cbr:same case-base some-case-1 some-case-2 some-case-3)
+
+  ; Setting Time
+
+  cbr:set-time case-base some-case-1 200
+  show (word "testing new cbr:time " cbr:time case-base some-case-1)
 
   ; Listing
 
@@ -42,27 +54,43 @@ to setup
     show (word "iterate testing cbr:time " cbr:time case-base this-case)
   ]
 
-  ; Forgetting
-
-  cbr:forgettable case-base true
-
   ; Size stuff
 
   cbr:max-size case-base 3
-  let some-case-4 cbr:add case-base some-state-4 some-outcome some-decision
+  let some-case-4 cbr:add case-base some-state-4 some-outcome-4 some-decision-4
   show (word "Size of case-base = " length cbr:all case-base)
   cbr:resize case-base
   show (word "Size of shrinkage case-base = " length cbr:all case-base)
 
+    ; Forgetting
+
+  cbr:forgettable case-base true
+  cbr:forget case-base 3
+  show (word "Size of forgotten case-base = " length cbr:all case-base)
 end
 
 to-report comparator [some-case-base case-1 case-2 case-3]
+  let dec-1 cbr:decision some-case-base case-1
+  show (word "dec 1 = " dec-1)
+  let dec-2 cbr:decision some-case-base case-2
+  show (word "dec 2 = " dec-2)
+  let dec-3 cbr:decision some-case-base case-3
+  show (word "dec 3 = " dec-3)
+
   let arg-1 cbr:state some-case-base case-1
-  let arg-2 cbr:state some-case-base case-2
-  let arg-3 cbr:state some-case-base case-3
   show (word "arg 1 = " arg-1)
+  let arg-2 cbr:state some-case-base case-2
   show (word "arg 2 = " arg-2)
+  let arg-3 cbr:state some-case-base case-3
   show (word "arg 3 = " arg-3)
+
+  let out-1 cbr:outcome some-case-base case-1
+  show (word "out 1 = " arg-1)
+  let out-2 cbr:outcome some-case-base case-2
+  show (word "out 2 = " out-2)
+  let out-3 cbr:outcome some-case-base case-3
+  show (word "out 3 = " out-3)
+
   if not is-list? arg-1 or not is-list? arg-2 or not is-list? arg-3 [
     report cbr:invalid
   ]

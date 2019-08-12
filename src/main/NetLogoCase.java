@@ -2,7 +2,6 @@
  * 
  */
 import java.io.IOException;
-import java.time.*;
 import java.util.*;
 
 import org.nlogo.core.ExtensionObject;
@@ -19,8 +18,8 @@ public class NetLogoCase extends Case implements ExtensionObject {
 
 	public static final String typeName = "case";
 	
-	public NetLogoCase(NetLogoFeatureValueSet state, Object activity, NetLogoFeatureValueSet outcome, LocalDateTime time) {
-		super(state, activity, outcome, time);
+	public NetLogoCase(NetLogoFeatureValueSet state, Object activity, NetLogoFeatureValueSet outcome, Double ticks) {
+		super(state, activity, outcome, ticks);
 		this.id = next();
 	}
 	

@@ -260,10 +260,10 @@ public class CaseBase implements Collection<Case> {
 		}
 	}
 
-	public void forgetOlderThan(LocalDateTime dateTime)
+	public void forgetOlderThan(Double ticks)
 	{
 		if (forgettable)
-			base.removeIf(c -> c.getTime().isBefore(dateTime));
+			base.removeIf(c -> c.getTime() < ticks);
 	}
 
 	public int getMaxSize()

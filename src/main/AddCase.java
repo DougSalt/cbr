@@ -16,12 +16,12 @@ public class AddCase implements Reporter
 			LogoList state = args[1].getList();
 			Object activity = args[2].get();
 			LogoList outcome = args[3].getList();
-			LocalDateTime time = DateUtils.currentTime();
+            Double ticks = context.getAgent().world().ticks();
 
 			NetLogoFeatureValueSet stateValueSet = NetLogoFeatureValueSet.manifest(state);
 			NetLogoFeatureValueSet outcomeValueSet = NetLogoFeatureValueSet.manifest(outcome);
 
-			NetLogoCase logoCase = new NetLogoCase(stateValueSet, activity, outcomeValueSet, time);
+			NetLogoCase logoCase = new NetLogoCase(stateValueSet, activity, outcomeValueSet, ticks);
 			caseBase.addCase(logoCase);
 
 			return logoCase;

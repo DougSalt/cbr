@@ -20,7 +20,6 @@
 
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 /**
  * <!-- Case -->
@@ -38,13 +37,16 @@ public class Case {
 
 	private final FeatureSet.Value outcome;
 
-	private LocalDateTime time;
+	private Double ticks;
 
-	public Case(FeatureSet.Value state, Object activity, FeatureSet.Value outcome, LocalDateTime time) {
+    private Double rank;
+
+	public Case(FeatureSet.Value state, Object activity, FeatureSet.Value outcome, Double ticks) {
 		this.state = state;
 		this.activity = activity;
 		this.outcome = outcome;
-		this.time = time;
+		this.ticks= ticks;
+        this.rank = 0.0;
 	}
 
 	public FeatureSet.Value getState() {
@@ -59,15 +61,26 @@ public class Case {
 		return outcome;
 	}
 
-	public LocalDateTime getTime()
+	public Double getTime()
 	{
-		return time;
+		return ticks;
 	}
 
-	public void setTime(LocalDateTime time)
+	public void setTime(Double time)
 	{
-		this.time = time;
+		this.ticks= time;
 	}
+
+	public Double getRank()
+	{
+		return rank;
+	}
+
+	public void setRank(Double rank)
+	{
+		this.rank = rank;
+	}
+
 
 	public boolean matches(Feature<?>.Value... queries) {
 		for(Feature<?>.Value query : queries) {
@@ -104,7 +117,7 @@ public class Case {
 		buf.append(" | ");
 		buf.append(outcome.toString());
 		buf.append(" | ");
-		buf.append(time.toString());
+		buf.append(ticks.toString());
 
 		buf.append(">");
 
@@ -119,7 +132,7 @@ public class Case {
 		buf.append(" | ");
 		buf.append(outcome.toString());
 		buf.append(" | ");
-		buf.append(time.toString());
+		buf.append(ticks.toString());
 		buf.append(">");
 		return buf.toString();
 	}
@@ -131,8 +144,8 @@ public class Case {
 			FeatureSet.Value state = FeatureSet.parseValueString(parts[0]);
 			Object activity = StringInitializer.parseNewInstance(parts[1]);
 			FeatureSet.Value outcome = FeatureSet.parseValueString(parts[2]);
-			LocalDateTime time = LocalDateTime.parse(parts[3].trim());
-			return new Case(state, activity, outcome, time);
+			Double ticks = Double.parseDouble(parts[3].trim());
+			return new Case(state, activity, outcome, ticks);
 		}
 		else {
 			throw new CaseBaseException("Invalid case string: \"" + cstr + "\" -- must start with \"<\" and end with \">\"");

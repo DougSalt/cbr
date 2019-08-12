@@ -13,16 +13,8 @@ public class Forget implements Command
 		if (args[0].get() instanceof NetLogoCaseBase)
 		{
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
-
-			if (args[1].get() instanceof String)
-			{
-				LocalDateTime dateTime = DateUtils.parseDateTime(args[1].getString().trim());
-				caseBase.forgetOlderThan(dateTime);
-			}
-			else
-			{
-				throw new ExtensionException("Invalid time");
-			}
+			Double ticks = (Double)args[1].get();
+			caseBase.forgetOlderThan(ticks);
 		}
 		else
 		{
@@ -33,6 +25,6 @@ public class Forget implements Command
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.StringType() });
+		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
 	}
 }

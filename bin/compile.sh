@@ -67,9 +67,11 @@ bin/clean.sh 2>/dev/null
     src/main/Remove.java \
     src/main/Resize.java \
     src/main/Same.java \
-    src/main/SetTime.java \
     src/main/MaxSize.java \
+    src/main/Rank.java \
     src/main/State.java \
+    src/main/SetRank.java \
+    src/main/SetTime.java \
     src/main/Time.java \
     src/main/Yes.java 
 

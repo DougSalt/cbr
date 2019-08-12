@@ -38,6 +38,7 @@ rm \
 	bin/No.class \
 	bin/Outcome.class \
 	bin/POCmp.class \
+	bin/Rank.class \
 	bin/Remove.class \
 	bin/Resize.class \
 	bin/Same.class \

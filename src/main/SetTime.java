@@ -2,8 +2,6 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.*;
 
-import java.time.*;
-
 public class SetTime implements Command
 {
 	@Override
@@ -15,8 +13,8 @@ public class SetTime implements Command
 
 			if (args[1].get() instanceof NetLogoCase) {
 				NetLogoCase logoCase = (NetLogoCase) args[1].get();
-    		    LocalDateTime time = DateUtils.parseDateTime(args[2].getString().trim());
-                logoCase.setTime(time);
+    		    Double ticks = (Double)args[2].get();
+                logoCase.setTime(ticks);
 			}
 			else {
 				throw new ExtensionException("Invalid case");
@@ -29,6 +27,6 @@ public class SetTime implements Command
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(),Syntax.WildcardType()});
+		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(),Syntax.NumberType()});
 	}
 }

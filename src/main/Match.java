@@ -17,7 +17,7 @@ public class Match implements Reporter
 			LogoList state = args[2].getList();
 			Object activity = args[3].get();
 			LogoList outcome = args[4].getList();
-			LocalDateTime time = DateUtils.currentTime();
+			Double time = context.getAgent().world().ticks();
 
             // Create a temporary case to allow the use of the comparator.
 

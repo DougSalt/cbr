@@ -2,7 +2,6 @@
  * 
  */
 import java.io.IOException;
-import java.time.*;
 
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.ExtensionObject;
@@ -89,10 +88,11 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 			throw new ExtensionException("An outcome in a case should be initialized from a list: " + outcome);
 		}
 
-		// TODO: parse this properly
-		LocalDateTime time = LocalDateTime.parse(case_list.get(CASE_LIST_TIME_IX).toString());
-		if (!(time instanceof LocalDateTime))
-			throw new ExtensionException("A time in a case should be an integer: " + time);
+        Object ticks = case_list.get(CASE_LIST_TIME_IX);
+        if (!(ticks instanceof Number)) {
+			throw new ExtensionException("A time in a case should be a number: " + ticks);
+        }
+
 
 		NetLogoFeatureValueSet state_fsv = (stateFeatures == null) ? NetLogoFeatureValueSet.manifest((LogoList)state)
 				: NetLogoFeatureValueSet.manifest((LogoList)state, stateFeatures);
@@ -108,7 +108,7 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 			outcomeFeatures = outcome_fsv.getFeatureSet();
 		}
 		
-		super.add(new NetLogoCase(state_fsv, activity, outcome_fsv, time));
+		super.add(new NetLogoCase(state_fsv, activity, outcome_fsv, ((Number)ticks).doubleValue()));
 	}
 	
 	private static final long next() {

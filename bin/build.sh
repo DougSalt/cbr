@@ -42,8 +42,10 @@ fi
 	No.class \
 	Outcome.class \
 	POCmp.class \
+	Rank.class \
 	Remove.class \
 	Resize.class \
+	SetRank.class \
 	SetTime.class \
 	Same.class \
 	MaxSize.class \

@@ -25,13 +25,15 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("add-case-base", new AddCaseBase());
 		primManager.addPrimitive("all", new AllCases());
 		primManager.addPrimitive("remove", new Remove());
-		primManager.addPrimitive("time", new Time());
 		primManager.addPrimitive("state", new State());
 		primManager.addPrimitive("decision", new Decision());
 		primManager.addPrimitive("outcome", new Outcome());
 		primManager.addPrimitive("forget", new Forget());
 		primManager.addPrimitive("forgettable", new Forgettable());
 		primManager.addPrimitive("max-size", new MaxSize());
+		primManager.addPrimitive("rank", new Rank());
+		primManager.addPrimitive("set-rank", new SetRank());
+		primManager.addPrimitive("time", new Time());
 		primManager.addPrimitive("set-time", new SetTime());
 		primManager.addPrimitive("resize", new Resize());
 		primManager.addPrimitive("lambda", new CaseLambda());
