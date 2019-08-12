@@ -1,6 +1,10 @@
 #!/bin/sh
 cd bin
-jar cvmf ../jar-manifest.txt ../model/cbr/cbr.jar \
+if [ $(uname) = "CYGWIN_NT-10.0" ]
+then
+    JAR='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/jar'
+fi
+"$JAR" cvmf ../jar-manifest.txt ../model/cbr/cbr.jar \
 	AddCase.class \
 	AddCaseBase.class \
 	AllCases.class \

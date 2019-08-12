@@ -3,7 +3,7 @@
 # Doug - August 2019
 
 # A script to compile the cbr plugin. I probably should use ant to do this,
-# I am unaware of how the javac treats dependencies and cannot be bothered
+# I am unaware of how the $JAVAC treats dependencies and cannot be bothered
 # to find out. I have also taken this opportunity to clear out the lib
 # directory, because generally people cannot be bothered working out which
 # libraries they need and just bung in the last set that work - hence the
@@ -16,9 +16,17 @@
 # Note that I am using a named removed in the clean, because there might be
 # other stuff that this shouldn't clean - I am talking to you eclipse IDE.
 
+JAVAC=javac
+CLASS_PATH=lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar
+if [ $(uname) = "CYGWIN_NT-10.0" ]
+then
+    JAVAC='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/javac'
+    CLASS_PATH="bin;lib\netlogo-6.1.0.jar;lib\scala-library.jar"
+fi
+
 bin/clean.sh 2>/dev/null
 
-javac -d bin -cp lib/netlogo-6.1.0.jar:bin \
+"$JAVAC" -d bin -cp $CLASS_PATH \
     src/main/Case.java \
     src/main/CaseBase.java \
     src/main/CaseBaseException.java \
@@ -31,7 +39,7 @@ javac -d bin -cp lib/netlogo-6.1.0.jar:bin \
     src/main/StringFeatureValue.java \
     src/main/StringInitializer.java
 
-javac -d bin -cp lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar \
+"$JAVAC" -d bin -cp $CLASS_PATH \
     src/main/AddCase.java \
     src/main/AddCaseBase.java \
     src/main/AllCases.java \
@@ -64,3 +72,4 @@ javac -d bin -cp lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar \
     src/main/State.java \
     src/main/Time.java \
     src/main/Yes.java 
+
