@@ -24,6 +24,12 @@ then
     CLASS_PATH="bin;lib\netlogo-6.1.0.jar;lib\scala-library.jar"
 fi
 
+if [ -n "$1" ]
+then
+    "$JAVAC" -d bin -cp $CLASS_PATH "$1"
+    exit
+fi
+
 bin/clean.sh 2>/dev/null
 
 "$JAVAC" -d bin -cp $CLASS_PATH \
@@ -52,7 +58,6 @@ bin/clean.sh 2>/dev/null
     src/main/Equal.java \
     src/main/Forget.java \
     src/main/Forgettable.java \
-    src/main/FromList.java \
     src/main/Invalid.java \
     src/main/Match.java \
     src/main/NetLogoCase.java \
@@ -75,3 +80,4 @@ bin/clean.sh 2>/dev/null
     src/main/Time.java \
     src/main/Yes.java 
 
+#    src/main/FromList.java \
