@@ -1,5 +1,6 @@
 #!/bin/sh
 cd bin
+JAR=jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
     JAR='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/jar'
