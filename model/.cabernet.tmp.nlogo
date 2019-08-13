@@ -131,8 +131,7 @@ to-report comparator [some-case-base case-1 case-2 case-3]
     report cbr:invalid
   ]
   if (item 0 arg-1 = item 0 arg-2 and
-      item 1 arg-1 = item 1 arg-2 and
-      item 2 arg-1 = item 2 arg-2) [
+      ) [
     show 4
     report cbr:equal
   ]

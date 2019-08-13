@@ -13,8 +13,7 @@ public class Forget implements Command
 		if (args[0].get() instanceof NetLogoCaseBase)
 		{
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
-			Double ticks = (Double)args[1].get();
-			caseBase.forgetOlderThan(ticks);
+			caseBase.forgetCasesOlderThanTickInfimum();
 		}
 		else
 		{
@@ -25,6 +24,6 @@ public class Forget implements Command
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
+		return SyntaxJ.commandSyntax(new int[]{Syntax.WildcardType()});
 	}
 }

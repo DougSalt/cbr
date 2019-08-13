@@ -2,7 +2,7 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.*;
 
-public class Forgettable implements Command
+public class SetMaxSize implements Command
 {
 	@Override
 	public void perform(Argument[] args, Context context)
@@ -12,14 +12,14 @@ public class Forgettable implements Command
 		{
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
 
-			if (args[1].get() instanceof Boolean)
+			if (args[1].get() instanceof Double)
 			{
-				boolean forgettable = args[1].getBoolean();
-				caseBase.setForgettable(forgettable);
+				int maxSize = args[1].getIntValue();
+				caseBase.setMaxSize(maxSize);
 			}
 			else
 			{
-				throw new ExtensionException("Expected second argument to be a boolean");
+				throw new ExtensionException("Invalid size");
 			}
 		}
 		else
@@ -31,6 +31,6 @@ public class Forgettable implements Command
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.BooleanType() });
+		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
 	}
 }

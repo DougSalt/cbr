@@ -14,30 +14,54 @@ public class Match implements Reporter
 		if (args[0].get() instanceof NetLogoCaseBase) {
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
 
-			LogoList state = args[2].getList();
-			Object activity = args[3].get();
-			LogoList outcome = args[4].getList();
+			Object state = args[1].get();
+			Object activity = args[2].get();
+			Object outcome = args[3].get();
 			Double time = context.getAgent().world().ticks();
 
             // Create a temporary case to allow the use of the comparator.
-
-			NetLogoFeatureValueSet stateValueSet = NetLogoFeatureValueSet.manifest(state);
-			NetLogoFeatureValueSet outcomeValueSet = NetLogoFeatureValueSet.manifest(outcome);
-			NetLogoCase refCase = new NetLogoCase(stateValueSet, activity, outcomeValueSet, time);
-            // Er-u-unno - go figure
+			NetLogoCase ref = new NetLogoCase(state, activity, outcome, time);
+            // Er I, dunno - go figure
             Object result = Nobody$.MODULE$;
-			caseBase.addCase(refCase);
+			caseBase.addCase(ref);
 
             if (caseBase.getMaxSize() < Integer.MAX_VALUE) {
                 caseBase.imposeSizeLimit(caseBase.getMaxSize());
             }
 
-            if (caseBase.isForgettable()) {
+            caseBase.forgetCasesOlderThanTickInfimum();
 
+            Case[] cases = caseBase.toArray(new Case[caseBase.size()]);
+            if (cases.length > 1) {
+                Case obj  = cases[0];
+                for (int i = 1; i < cases.length; i++) {
+                    Case src = (Case)cases[i];
+                    Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
+                    Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
+                    if (CaseBase.INVALID.equalsIgnoreCase(answer.toString())) {
+                        continue;
+                    }
+                    else if (CaseBase.YES.equalsIgnoreCase(answer.toString())) {
+                        obj = src;
+                        result = src;
+                    }
+                    else if (CaseBase.NO.equalsIgnoreCase(answer.toString())) {
+                        result = obj;
+                    }
+                    else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
+                        if (src.getRank() > obj.getRank()) {
+                            result = src;
+                            obj = src;
+                        }
+                        else {
+                            result = obj;
+                        }
+                    }
+
+                }
             }
 
-
-            caseBase.remove(refCase);
+            caseBase.remove(ref);
             return result;
 
 		} else {
@@ -48,6 +72,6 @@ public class Match implements Reporter
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.ListType(), Syntax.WildcardType(), Syntax.ListType() }, Syntax.WildcardType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType() }, Syntax.WildcardType());
 	}
 }

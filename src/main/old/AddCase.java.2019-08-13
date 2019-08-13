@@ -13,12 +13,15 @@ public class AddCase implements Reporter
 		if (args[0].get() instanceof NetLogoCaseBase) {
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
 
-			Object state = args[1].get();
+			LogoList state = args[1].getList();
 			Object activity = args[2].get();
-			Object outcome = args[3].get();
+			LogoList outcome = args[3].getList();
             Double ticks = context.getAgent().world().ticks();
 
-			NetLogoCase logoCase = new NetLogoCase(state, activity, outcome, ticks);
+			NetLogoFeatureValueSet stateValueSet = NetLogoFeatureValueSet.manifest(state);
+			NetLogoFeatureValueSet outcomeValueSet = NetLogoFeatureValueSet.manifest(outcome);
+
+			NetLogoCase logoCase = new NetLogoCase(stateValueSet, activity, outcomeValueSet, ticks);
 			caseBase.addCase(logoCase);
 
 			return logoCase;

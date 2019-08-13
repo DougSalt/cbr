@@ -40,14 +40,10 @@ public class CaseBase implements Collection<Case> {
 
 	private int maxSize = Integer.MAX_VALUE;
 
-	private Double tickInfimum = -1.0;
+	private boolean forgettable = false;
 
 	private AnonymousReporter caseLambda = null;
 
-    public static final String YES = "yes";
-    public static final String NO = "no";
-    public static final String INVALID = "invalid";
-    public static final String EQUAL = "equal";
 	/*
 	 * Have a think about tick list and whether that could be maintained.
 	 * At each element in the tick list we'd record the last + 1 element in the
@@ -64,17 +60,13 @@ public class CaseBase implements Collection<Case> {
 		base = new ArrayList<Case>();
 	}
 
-//	public int addCase(Case c) {
-//		if (!((base.size() + 1) == maxSize) && !base.add(c))
-//		{
-//			throw new RuntimeException("Failed to add case " + c + " to case base");
-//		}
-//		return base.size() - 1;
-//	}
-
-    public void addCase(Case c) {
-        base.add(c);
-    }
+	public int addCase(Case c) {
+		if (!((base.size() + 1) == maxSize) && !base.add(c))
+		{
+			throw new RuntimeException("Failed to add case " + c + " to case base");
+		}
+		return base.size() - 1;
+	}
 
 	public void addCases(Collection<? extends Case> cc) {
 		base.ensureCapacity(base.size() + cc.size());
@@ -94,17 +86,17 @@ public class CaseBase implements Collection<Case> {
 		return base.get(i);
 	}
 
-//	public Collection<Case> matches(Feature<?>.Value... values) {
-//		LinkedList<Case> list = new LinkedList<Case>();
-//
-//		for(Case c : base) {
-//			if(c.matches(values)) {
-//				list.add(c);
-//			}
-//		}
-//
-//		return list;
-//	}
+	public Collection<Case> matches(Feature<?>.Value... values) {
+		LinkedList<Case> list = new LinkedList<Case>();
+
+		for(Case c : base) {
+			if(c.matches(values)) {
+				list.add(c);
+			}
+		}
+
+		return list;
+	}
 
 	public Collection<Case> forActivity(Object activity) {
 		LinkedList<Case> list = new LinkedList<Case>();
@@ -118,17 +110,17 @@ public class CaseBase implements Collection<Case> {
 		return list;
 	}
 
-//	public Collection<Case> outcomeMatches(Feature<?>.Value... values) {
-//		LinkedList<Case> list = new LinkedList<Case>();
-//
-//		for(Case c : base) {
-//			if(c.outcomeMatches(values)) {
-//				list.add(c);
-//			}
-//		}
-//
-//		return list;
-//	}
+	public Collection<Case> outcomeMatches(Feature<?>.Value... values) {
+		LinkedList<Case> list = new LinkedList<Case>();
+
+		for(Case c : base) {
+			if(c.outcomeMatches(values)) {
+				list.add(c);
+			}
+		}
+
+		return list;
+	}
 
 	public void imposeSizeLimit(int size) {
 		while(base.size() > size) {
@@ -253,20 +245,26 @@ public class CaseBase implements Collection<Case> {
 		return buf.toString();
 	}
 
-//	public static CaseBase parseString(String cbstr) throws ClassNotFoundException, IOException, CaseBaseException {
-//		if(cbstr.startsWith("[") && cbstr.endsWith("]")) {
-//			CaseBase cb = new CaseBase();
-//			cbstr = cbstr.substring(1, cbstr.length() - 1);
-//			String[] cases = cbstr.split("; ");
-//			for(String case_str: cases) {
-//				cb.add(Case.parseString(case_str));
-//			}
-//			return cb;
-//		}
-//		else {
-//			throw new CaseBaseException("Invalid case base string: \"" + cbstr + "\" -- must start with \"[\" and end with \"]\"");
-//		}
-//	}
+	public static CaseBase parseString(String cbstr) throws ClassNotFoundException, IOException, CaseBaseException {
+		if(cbstr.startsWith("[") && cbstr.endsWith("]")) {
+			CaseBase cb = new CaseBase();
+			cbstr = cbstr.substring(1, cbstr.length() - 1);
+			String[] cases = cbstr.split("; ");
+			for(String case_str: cases) {
+				cb.add(Case.parseString(case_str));
+			}
+			return cb;
+		}
+		else {
+			throw new CaseBaseException("Invalid case base string: \"" + cbstr + "\" -- must start with \"[\" and end with \"]\"");
+		}
+	}
+
+	public void forgetOlderThan(Double ticks)
+	{
+		if (forgettable)
+			base.removeIf(c -> c.getTime() < ticks);
+	}
 
 	public int getMaxSize()
 	{
@@ -276,20 +274,21 @@ public class CaseBase implements Collection<Case> {
 	public void setMaxSize(int maxSize)
 	{
 		this.maxSize = maxSize;
+		forgettable = false;
 	}
 
-    public Double getTickInfimum() {
-        return tickInfimum;
+    public void resize()
+    {
     }
+	public boolean isForgettable()
+	{
+		return forgettable;
+	}
 
-    public void setTickInfimum(Double tickInfimum) {
-        this.tickInfimum = tickInfimum;
-    }
-
-    public void forgetCasesOlderThanTickInfimum() {
-        if (tickInfimum >= 0)
-            base.removeIf(c -> c.getTime() < tickInfimum);
-    }
+	public void setForgettable(boolean forgettable)
+	{
+		this.forgettable = forgettable;
+	}
 
 	public AnonymousReporter getCaseLambda()
 	{
@@ -310,7 +309,7 @@ public class CaseBase implements Collection<Case> {
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
 		Object result = caseLambda.report(context,convertedArgs);
-		return EQUAL.equalsIgnoreCase(result.toString());
+		return "equals".equalsIgnoreCase(result.toString());
 	}
 
 	public boolean isCloser(Argument[] args, Context context) 
@@ -322,7 +321,7 @@ public class CaseBase implements Collection<Case> {
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
 		Object result = caseLambda.report(context,convertedArgs);
-		return YES.equalsIgnoreCase(result.toString());
+		return "yes".equalsIgnoreCase(result.toString());
 	}
 
 	public boolean isComparable(Argument[] args, Context context)
@@ -334,6 +333,6 @@ public class CaseBase implements Collection<Case> {
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
 		Object result = caseLambda.report(context,convertedArgs);
-		return !NO.equalsIgnoreCase(result.toString());
+		return !"invalid".equalsIgnoreCase(result.toString());
 	}
 }

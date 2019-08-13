@@ -8,7 +8,7 @@ public class Equal implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return "equal";
+		return CaseBase.EQUAL;
 	}
 
 	@Override

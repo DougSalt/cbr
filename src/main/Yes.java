@@ -8,7 +8,7 @@ public class Yes implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return "yes";
+		return CaseBase.YES;
 	}
 
 	@Override

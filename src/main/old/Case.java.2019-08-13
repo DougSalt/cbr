@@ -31,17 +31,17 @@ import java.io.IOException;
  */
 public class Case {
 
-	private final Object state;
+	private final FeatureSet.Value state;
 
 	private final Object activity;
 
-	private final Object outcome;
+	private final FeatureSet.Value outcome;
 
 	private Double ticks;
 
     private Double rank;
 
-	public Case(Object state, Object activity, Object outcome, Double ticks) {
+	public Case(FeatureSet.Value state, Object activity, FeatureSet.Value outcome, Double ticks) {
 		this.state = state;
 		this.activity = activity;
 		this.outcome = outcome;
@@ -49,7 +49,7 @@ public class Case {
         this.rank = 0.0;
 	}
 
-	public Object getState() {
+	public FeatureSet.Value getState() {
 		return state;
 	}
 
@@ -57,7 +57,7 @@ public class Case {
 		return activity;
 	}
 
-	public Object getOutcome() {
+	public FeatureSet.Value getOutcome() {
 		return outcome;
 	}
 
@@ -82,27 +82,27 @@ public class Case {
 	}
 
 
-//	public boolean matches(Feature<?>.Value... queries) {
-//		for(Feature<?>.Value query : queries) {
-//			if(!state.matches(query)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//    public boolean outcomeMatches(Feature<?>.Value... queries) {
-//		for(Feature<?>.Value query : queries) {
-//			if(!outcome.matches(query)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//	public POCmp cmp(FeatureSet.Value other) {
-//		return POCmp.NO;
-//	}
+	public boolean matches(Feature<?>.Value... queries) {
+		for(Feature<?>.Value query : queries) {
+			if(!state.matches(query)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean outcomeMatches(Feature<?>.Value... queries) {
+		for(Feature<?>.Value query : queries) {
+			if(!outcome.matches(query)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public POCmp cmp(FeatureSet.Value other) {
+		return POCmp.NO;
+	}
 
 	@Override
 	public String toString() {
@@ -128,7 +128,7 @@ public class Case {
 		StringBuffer buf = new StringBuffer("<");
 		buf.append(state.toString());
 		buf.append(" | ");
-		buf.append(activity.toString());
+		buf.append(StringInitializer.toInitializableString(activity));
 		buf.append(" | ");
 		buf.append(outcome.toString());
 		buf.append(" | ");
@@ -137,20 +137,20 @@ public class Case {
 		return buf.toString();
 	}
 
-////	public static Case parseString(String cstr) throws ClassNotFoundException, IOException, CaseBaseException {
-////		if(cstr.startsWith("<") && cstr.endsWith(">")) {
-////			cstr = cstr.substring(1, cstr.length() - 1);
-////			String[] parts = cstr.split(" \\| ");
-////			FeatureSet.Value state = FeatureSet.parseValueString(parts[0]);
-////			Object activity = StringInitializer.parseNewInstance(parts[1]);
-////			FeatureSet.Value outcome = FeatureSet.parseValueString(parts[2]);
-////			Double ticks = Double.parseDouble(parts[3].trim());
-////			return new Case(state, activity, outcome, ticks);
-////		}
-////		else {
-////			throw new CaseBaseException("Invalid case string: \"" + cstr + "\" -- must start with \"<\" and end with \">\"");
-////		}
-////	}
+	public static Case parseString(String cstr) throws ClassNotFoundException, IOException, CaseBaseException {
+		if(cstr.startsWith("<") && cstr.endsWith(">")) {
+			cstr = cstr.substring(1, cstr.length() - 1);
+			String[] parts = cstr.split(" \\| ");
+			FeatureSet.Value state = FeatureSet.parseValueString(parts[0]);
+			Object activity = StringInitializer.parseNewInstance(parts[1]);
+			FeatureSet.Value outcome = FeatureSet.parseValueString(parts[2]);
+			Double ticks = Double.parseDouble(parts[3].trim());
+			return new Case(state, activity, outcome, ticks);
+		}
+		else {
+			throw new CaseBaseException("Invalid case string: \"" + cstr + "\" -- must start with \"<\" and end with \">\"");
+		}
+	}
 
 	@Override
 	public boolean equals(Object other) {

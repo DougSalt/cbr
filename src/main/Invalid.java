@@ -8,7 +8,7 @@ public class Invalid implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return "invalid";
+		return CaseBase.INVALID;
 	}
 
 	@Override

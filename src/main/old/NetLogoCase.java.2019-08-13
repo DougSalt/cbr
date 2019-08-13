@@ -18,7 +18,7 @@ public class NetLogoCase extends Case implements ExtensionObject {
 
 	public static final String typeName = "case";
 	
-	public NetLogoCase(Object state, Object activity, Object outcome, Double ticks) {
+	public NetLogoCase(NetLogoFeatureValueSet state, Object activity, NetLogoFeatureValueSet outcome, Double ticks) {
 		super(state, activity, outcome, ticks);
 		this.id = next();
 	}
@@ -28,16 +28,16 @@ public class NetLogoCase extends Case implements ExtensionObject {
 		this.id = next();
 	}
 	
-//	public NetLogoCase(String value) throws ClassNotFoundException, IOException, CaseBaseException {
-//		this(Case.parseString(value));
-//	}
+	public NetLogoCase(String value) throws ClassNotFoundException, IOException, CaseBaseException {
+		this(Case.parseString(value));
+	}
 		
 	public LogoList asLogoList() {
 		LogoList list = LogoList.Empty();
 		
-		list = list.lput(getState());
+		list = list.lput(getState().asLogoList());
 		list = list.lput(getActivity());
-		list = list.lput(getOutcome());
+		list = list.lput(getOutcome().asLogoList());
 		list = list.lput(getTime());
 		
 		return list;
@@ -55,8 +55,8 @@ public class NetLogoCase extends Case implements ExtensionObject {
 	 * @see uk.ac.hutton.caber.Case#getState()
 	 */
 	@Override
-	public Object getState() {
-		return (Object)super.getState();
+	public NetLogoFeatureValueSet getState() {
+		return (NetLogoFeatureValueSet)super.getState();
 	}
 
 	/** 
@@ -65,8 +65,8 @@ public class NetLogoCase extends Case implements ExtensionObject {
 	 * @see uk.ac.hutton.caber.Case#getOutcome()
 	 */
 	@Override
-	public Object getOutcome() {
-		return (Object)super.getOutcome();
+	public NetLogoFeatureValueSet getOutcome() {
+		return (NetLogoFeatureValueSet)super.getOutcome();
 	}
 
 	/* (non-Javadoc)

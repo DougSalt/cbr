@@ -2,7 +2,7 @@ import org.nlogo.api.*;
 import org.nlogo.api.Reporter;
 import org.nlogo.core.*;
 
-public class Time implements Reporter
+public class GetTime implements Reporter
 {
 	@Override
 	public Object report(Argument[] args, Context context)

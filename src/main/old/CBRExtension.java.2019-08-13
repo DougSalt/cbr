@@ -29,17 +29,14 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("decision", new Decision());
 		primManager.addPrimitive("outcome", new Outcome());
 		primManager.addPrimitive("forget", new Forget());
-		primManager.addPrimitive("get-earliest", new GetEarliest());
-		primManager.addPrimitive("set-earliest", new SetEarliest());
-		primManager.addPrimitive("get-max-size", new GetMaxSize());
-		primManager.addPrimitive("set-max-size", new SetMaxSize());
-		primManager.addPrimitive("get-rank", new GetRank());
+		primManager.addPrimitive("forgettable", new Forgettable());
+		primManager.addPrimitive("max-size", new MaxSize());
+		primManager.addPrimitive("rank", new Rank());
 		primManager.addPrimitive("set-rank", new SetRank());
-		primManager.addPrimitive("get-time", new GetTime());
+		primManager.addPrimitive("time", new Time());
 		primManager.addPrimitive("set-time", new SetTime());
 		primManager.addPrimitive("resize", new Resize());
 		primManager.addPrimitive("lambda", new CaseLambda());
-		primManager.addPrimitive("match", new Match());
 		primManager.addPrimitive("same", new Same());
 		primManager.addPrimitive("closer", new Closer());
 		primManager.addPrimitive("comparable", new Comparable());
@@ -58,14 +55,13 @@ public class CBRExtension extends DefaultClassManager {
 			throw new IllegalArgumentException("value is null");
 		}
 		try {
-			//if(typeName.equals(NetLogoCaseBase.typeName)) {
-			//	return new NetLogoCaseBase(value);
-			//}
-			//else if(typeName.equals(NetLogoCase.typeName)) {
-		    //		return new NetLogoCase(value);
-			//}
-			//else 
-            if(typeName.equals(NetLogoFeature.typeName)) {
+			if(typeName.equals(NetLogoCaseBase.typeName)) {
+				return new NetLogoCaseBase(value);
+			}
+			else if(typeName.equals(NetLogoCase.typeName)) {
+				return new NetLogoCase(value);
+			}
+			else if(typeName.equals(NetLogoFeature.typeName)) {
 				return new NetLogoFeature(value);
 			}
 			else if(typeName.equals(NetLogoFeatureValue.typeName)) {
@@ -82,8 +78,7 @@ public class CBRExtension extends DefaultClassManager {
 				return super.readExtensionObject(reader, typeName, value);
 			}
 		}
-//		catch(CaseBaseException | ClassNotFoundException | IOException e) {
-		catch(CaseBaseException | ClassNotFoundException e) {
+		catch(CaseBaseException | ClassNotFoundException | IOException e) {
 
 		}
 

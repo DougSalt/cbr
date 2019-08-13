@@ -9,18 +9,17 @@ fi
 	AddCase.class \
 	AddCaseBase.class \
 	AllCases.class \
-	CBRExtension.class \
 	Case.class \
 	CaseBase.class \
 	CaseBaseException.class \
 	CaseLambda.class \
+	CBRExtension.class \
 	Closer.class \
 	Comparable.class \
 	ComparableFeature.class \
 	ComparableFeatureValue\$1.class \
 	ComparableFeatureValue\$Op.class \
 	ComparableFeatureValue.class \
-	DateUtils.class \
 	Decision.class \
 	Equal.class \
 	Feature\$1.class \
@@ -30,9 +29,12 @@ fi
 	FeatureSet\$Value.class \
 	FeatureSet.class \
 	Forget.class \
-	Forgettable.class \
-	FromList.class \
+	GetEarliest.class \
+	GetMaxSize.class \
+	GetRank.class \
+	GetTime.class \
 	Invalid.class \
+	Match.class \
 	NetLogoCase.class \
 	NetLogoCaseBase.class \
 	NetLogoFeature.class \
@@ -43,16 +45,15 @@ fi
 	No.class \
 	Outcome.class \
 	POCmp.class \
-	Rank.class \
 	Remove.class \
 	Resize.class \
+	Same.class \
+	SetEarliest.class \
+	SetMaxSize.class \
 	SetRank.class \
 	SetTime.class \
-	Same.class \
-	MaxSize.class \
 	State.class \
 	StringFeature.class \
 	StringFeatureValue.class \
 	StringInitializer.class \
-	Time.class \
 	Yes.class

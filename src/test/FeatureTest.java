@@ -73,6 +73,8 @@ public class FeatureTest {
 		fdbl = (Feature<Double>) Feature
 				.fromString("Double Feature (java.lang.Double)");
 		furl = (Feature<URL>) Feature.fromString("URL Feature (java.net.URL)");
+        fstr = (Feature<String>) Feature.fromString("String Feature (java.lang.String)");
+        System.out.println("NAME " + fstr.getName() + " TYPE " + fstr.getType());
 		try {
 			Feature<?> dummy = Feature.fromString(null);
 			fail("I can create a feature using fromString with a null argument");

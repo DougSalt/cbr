@@ -53,11 +53,13 @@ bin/clean.sh 2>/dev/null
     src/main/CaseLambda.java \
     src/main/Closer.java \
     src/main/Comparable.java \
-    src/main/DateUtils.java \
     src/main/Decision.java \
     src/main/Equal.java \
     src/main/Forget.java \
-    src/main/Forgettable.java \
+    src/main/GetEarliest.java \
+    src/main/GetMaxSize.java \
+    src/main/GetRank.java \
+    src/main/GetTime.java \
     src/main/Invalid.java \
     src/main/Match.java \
     src/main/NetLogoCase.java \
@@ -72,12 +74,11 @@ bin/clean.sh 2>/dev/null
     src/main/Remove.java \
     src/main/Resize.java \
     src/main/Same.java \
-    src/main/MaxSize.java \
-    src/main/Rank.java \
-    src/main/State.java \
+    src/main/SetEarliest.java \
+    src/main/SetMaxSize.java \
     src/main/SetRank.java \
     src/main/SetTime.java \
-    src/main/Time.java \
+    src/main/State.java \
     src/main/Yes.java 
 
 #    src/main/FromList.java \

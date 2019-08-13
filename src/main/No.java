@@ -8,7 +8,7 @@ public class No implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return "no";
+		return CaseBase.NO;
 	}
 
 	@Override

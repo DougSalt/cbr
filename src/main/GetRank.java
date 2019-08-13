@@ -2,7 +2,7 @@ import org.nlogo.api.*;
 import org.nlogo.api.Reporter;
 import org.nlogo.core.*;
 
-public class Rank implements Reporter
+public class GetRank implements Reporter
 {
 	@Override
 	public Object report(Argument[] args, Context context)
