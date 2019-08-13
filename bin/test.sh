@@ -1,8 +1,8 @@
 #!/bin/sh
 
 JAVA=java
-JAVAC=java
-CLASS_PATH=lib/junit-4.11.jar:bin
+JAVAC=javac
+CLASS_PATH=lib/junit-4.12.jar:bin:lib/hamcrest-core-1.3.jar:src/test 
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
     JAVA='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/java'
