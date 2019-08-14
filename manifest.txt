@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Extension-Name: cbr
-Class-Manager: uk.ac.hutton.cabernet.CBRExtension
-NetLogo-Extension-API-Version: 6.0

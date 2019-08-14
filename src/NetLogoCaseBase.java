@@ -12,10 +12,7 @@ import org.nlogo.core.LogoList;
  *
  */
 public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
-	private NetLogoFeatureSet stateFeatures = null;
 
-	private NetLogoFeatureSet outcomeFeatures = null;
-	
 	private final boolean fixedStateFeatures;
 	private final boolean fixedOutcomeFeatures;
 	
@@ -42,23 +39,23 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 		id = next();
 	}
 	
-	public NetLogoCaseBase(NetLogoFeatureSet stateFeatures, NetLogoFeatureSet outcomeFeatures) {
-		id = next();
-		if(stateFeatures != null) {
-			this.stateFeatures = stateFeatures;
-			fixedStateFeatures = true;
-		}
-		else {
-			fixedStateFeatures = false;
-		}
-		if(outcomeFeatures != null) {
-			this.outcomeFeatures = outcomeFeatures;
-			fixedOutcomeFeatures = true;
-		}
-		else {
-			fixedOutcomeFeatures = false;
-		}
-	}
+//	public NetLogoCaseBase(NetLogoFeatureSet stateFeatures, NetLogoFeatureSet outcomeFeatures) {
+//		id = next();
+//		if(stateFeatures != null) {
+//			this.stateFeatures = stateFeatures;
+//			fixedStateFeatures = true;
+//		}
+//		else {
+//			fixedStateFeatures = false;
+//		}
+//		if(outcomeFeatures != null) {
+//			this.outcomeFeatures = outcomeFeatures;
+//			fixedOutcomeFeatures = true;
+//		}
+//		else {
+//			fixedOutcomeFeatures = false;
+//		}
+//	}
 	
 	public NetLogoCaseBase(CaseBase value) {
 		this();
@@ -115,21 +112,21 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 		return ++next;
 	}
 
-	public void setStateFeatures(NetLogoFeatureSet state_features) throws ExtensionException {
-		if(stateFeatures != null && !stateFeatures.equals(state_features)) {
-			throw new ExtensionException("You can only set the state-features of a case base once (current setting " + stateFeatures
-					+ " -- attempted setting " + state_features + ")");
-		}
-		if(stateFeatures == null) stateFeatures = state_features;
-	}
+//	public void setStateFeatures(NetLogoFeatureSet state_features) throws ExtensionException {
+//		if(stateFeatures != null && !stateFeatures.equals(state_features)) {
+//			throw new ExtensionException("You can only set the state-features of a case base once (current setting " + stateFeatures
+//					+ " -- attempted setting " + state_features + ")");
+//		}
+//		if(stateFeatures == null) stateFeatures = state_features;
+//	}
 
-	public void setOutcomeFeatures(NetLogoFeatureSet outcome_features) throws ExtensionException {
-		if(outcomeFeatures != null && !outcomeFeatures.equals(outcome_features)) {
-			throw new ExtensionException("You can only set the outcome-features of a case base once (current setting " + outcomeFeatures
-					+ " -- attempted setting " + outcome_features + ")");
-		}
-		if(outcomeFeatures == null) stateFeatures = outcome_features;
-	}
+//	public void setOutcomeFeatures(NetLogoFeatureSet outcome_features) throws ExtensionException {
+//		if(outcomeFeatures != null && !outcomeFeatures.equals(outcome_features)) {
+//			throw new ExtensionException("You can only set the outcome-features of a case base once (current setting " + outcomeFeatures
+//					+ " -- attempted setting " + outcome_features + ")");
+//		}
+//		if(outcomeFeatures == null) stateFeatures = outcome_features;
+//	}
 
 	public LogoList asLogoList() {
 		LogoList list = LogoList.Empty();

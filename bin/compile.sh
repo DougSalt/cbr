@@ -33,52 +33,35 @@ fi
 bin/clean.sh 2>/dev/null
 
 "$JAVAC" -d bin -cp $CLASS_PATH \
-    src/main/Case.java \
-    src/main/CaseBase.java \
-    src/main/CaseBaseException.java \
-    src/main/ComparableFeature.java \
-    src/main/ComparableFeatureValue.java \
-    src/main/Feature.java \
-    src/main/FeatureSet.java \
-    src/main/POCmp.java \
-    src/main/StringFeature.java \
-    src/main/StringFeatureValue.java \
-    src/main/StringInitializer.java
-
-"$JAVAC" -d bin -cp $CLASS_PATH \
-    src/main/AddCase.java \
-    src/main/AddCaseBase.java \
-    src/main/AllCases.java \
-    src/main/CBRExtension.java \
-    src/main/CaseLambda.java \
-    src/main/Closer.java \
-    src/main/Comparable.java \
-    src/main/Decision.java \
-    src/main/Equal.java \
-    src/main/Forget.java \
-    src/main/GetEarliest.java \
-    src/main/GetMaxSize.java \
-    src/main/GetRank.java \
-    src/main/GetTime.java \
-    src/main/Invalid.java \
-    src/main/Match.java \
-    src/main/NetLogoCase.java \
-    src/main/NetLogoCaseBase.java \
-    src/main/NetLogoFeature.java \
-    src/main/NetLogoFeatureSet.java \
-    src/main/NetLogoFeatureValue.java \
-    src/main/NetLogoFeatureValueSet.java \
-    src/main/New.java \
-    src/main/No.java \
-    src/main/Outcome.java \
-    src/main/Remove.java \
-    src/main/Resize.java \
-    src/main/Same.java \
-    src/main/SetEarliest.java \
-    src/main/SetMaxSize.java \
-    src/main/SetRank.java \
-    src/main/SetTime.java \
-    src/main/State.java \
-    src/main/Yes.java 
-
-#    src/main/FromList.java \
+    src/Case.java \
+    src/CaseBase.java \
+    src/CaseBaseException.java \
+    src/AddCase.java \
+    src/AddCaseBase.java \
+    src/AllCases.java \
+    src/CBRExtension.java \
+    src/CaseLambda.java \
+    src/Closer.java \
+    src/Comparable.java \
+    src/Decision.java \
+    src/Equal.java \
+    src/Forget.java \
+    src/GetEarliest.java \
+    src/GetMaxSize.java \
+    src/GetRank.java \
+    src/GetTime.java \
+    src/Invalid.java \
+    src/Match.java \
+    src/NetLogoCase.java \
+    src/NetLogoCaseBase.java \
+    src/New.java \
+    src/No.java \
+    src/Outcome.java \
+    src/Remove.java \
+    src/Resize.java \
+    src/Same.java \
+    src/SetEarliest.java \
+    src/SetMaxSize.java \
+    src/SetRank.java \
+    src/SetTime.java \
+    src/State.java \

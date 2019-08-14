@@ -57,7 +57,7 @@ public class CBRExtension extends DefaultClassManager {
 		if(value == null) {
 			throw new IllegalArgumentException("value is null");
 		}
-		try {
+//		try {
 			//if(typeName.equals(NetLogoCaseBase.typeName)) {
 			//	return new NetLogoCaseBase(value);
 			//}
@@ -65,28 +65,27 @@ public class CBRExtension extends DefaultClassManager {
 		    //		return new NetLogoCase(value);
 			//}
 			//else 
-            if(typeName.equals(NetLogoFeature.typeName)) {
-				return new NetLogoFeature(value);
-			}
-			else if(typeName.equals(NetLogoFeatureValue.typeName)) {
-				return new NetLogoFeatureValue(value);			
-			}
-			else if(typeName.equals(NetLogoFeatureSet.typeName)) {
-				return new NetLogoFeatureSet(value);
-			}
+//            if(typeName.equals(NetLogoFeature.typeName)) {
+//				return new NetLogoFeature(value);
+//			}
+//			else if(typeName.equals(NetLogoFeatureValue.typeName)) {
+//				return new NetLogoFeatureValue(value);			
+//			}
+//			else if(typeName.equals(NetLogoFeatureSet.typeName)) {
+//				return new NetLogoFeatureSet(value);
+//			}
 			// TODO: Think about how to make this work
 //			else if(typeName.equals(NetLogoFeatureValueSet.typeName)) {
 //				return new NetLogoFeatureValueSet(value);
 //			}
-			else {
+//			else {
 				return super.readExtensionObject(reader, typeName, value);
-			}
+//			}
 		}
 //		catch(CaseBaseException | ClassNotFoundException | IOException e) {
-		catch(CaseBaseException | ClassNotFoundException e) {
+//
+//		}
 
-		}
-
-		throw new ExtensionException("Unknown extension type");
-	}
+//		throw new ExtensionException("Unknown extension type");
+//	}
 }

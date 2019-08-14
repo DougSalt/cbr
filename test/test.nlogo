@@ -119,20 +119,17 @@ to-report comparator [some-case-base case-1 case-2 case-3]
   show (word "out 3 = " out-3)
 
   if not is-list? arg-1 or not is-list? arg-2 or not is-list? arg-3 [
-    show 1
     report cbr:invalid
   ]
   if length arg-1 != length arg-2  [
-    show 2
     report cbr:invalid
   ]
   if length arg-2 != length arg-3 [
-    show 3
     report cbr:invalid
   ]
   if (item 0 arg-1 = item 0 arg-2 and
-      ) [
-    show 4
+      item 1 arg-1 = item 1 arg-2 and
+      item 2 arg-1 = item 2 arg-2) [
     report cbr:equal
   ]
 
@@ -149,14 +146,11 @@ to-report comparator [some-case-base case-1 case-2 case-3]
     ]
   ]
   if comparison-1-and-3 = 0 and comparison-2-and-3 = 0 [
-    show 5
     report cbr:invalid
   ]
   if comparison-1-and-3 > comparison-2-and-3 [
-    show 6
     report cbr:yes
   ]
-    show 7
   report cbr:no
 end
 @#$#@#$#@
