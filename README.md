@@ -2,6 +2,27 @@
 
 A NetLogo case based reasoning toolkit, `cbr` as a NetLogo plugin.
 
+The file you are looking for is `cbr.jar` and maybe be found in `test/cbr`.
+
+To use it, stick the file in a sub-directory in the same directory as your
+NetLogo called `cbr`.
+
+To use this, include the NetLogo plugin `cbr` in the extensions clause at the
+top of the NetLogo code:
+
+```
+extensions [cbr]
+```
+
+Assumptions: you are sane and running this on one of the following:
+
+1. Linux
+2. Cygwin on Windows
+3. Linux subsystem on Windows.
+
+In theory I could do all this with `.bat` files, but will only do so, if people
+really nag me about it.
+
 Have I mentioned anywhere else how much I absolutely detest and loathe Java. I
 have managed to compile this, but I have sorted out the dependencies are for
 creating the NetLogo plugin, and they are few. In Scala you can build a big jar
@@ -9,7 +30,6 @@ creating the NetLogo plugin, and they are few. In Scala you can build a big jar
 trivial, i.e. only the NetLogo library, then the cbr.jar is all that is needed
 to me.
 
-To use this, include the NetLogo plugin `cbr` in the extensions clause at the top of the NetLogo code.
 
 # Typical development workflow.
 
@@ -17,9 +37,9 @@ To use this, include the NetLogo plugin `cbr` in the extensions clause at the to
 2. `bin/compile.sh`
 3. `bin/build.sh` (does the release of the jar to the correct directory for
    testing).
-4. `bin/run.sh`
+4. `bin/test.sh`
 
-All the above can be done with: `bin\all.sh`
+All the above can be done with: `bin/all.sh`
 
 To clean, then `bin/clean.sh`
 
@@ -35,6 +55,7 @@ not tend to work that way, being Scala based.
 + doc - documentation directory. Contains documentation. Be
   careful some IDEs automatically clear this directory on a clean - there are
   useful files that are not automatically generated present in this directory.
++ INSTALL.md - instructions on how to install the plug-in.
 + jar-manifest.txt - manifest used to create the cbr.jar - the plugin.
 + lib - required libraries - these are already present in NetLogo.
 + LICENSE.txt - How you may use this plugin.
@@ -52,7 +73,7 @@ not tend to work that way, being Scala based.
   jar `cbr.jar` is in a subdirectory `cbr`, which is the jar you need to
   install the plugin.
 + TODO - list of outstanding tasks to complete on the plugin.
-   
+
 # Contacts
 
 doug[dot]salt[at]hutton[dot]ac[dot]uk
