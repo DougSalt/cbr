@@ -37,7 +37,7 @@ bin/clean.sh 2>/dev/null
     src/CaseBase.java \
     src/CaseBaseException.java \
     src/AddCase.java \
-    src/AddCaseBase.java \
+    src/CombineCaseBases.java \
     src/AllCases.java \
     src/CBRExtension.java \
     src/CaseLambda.java \

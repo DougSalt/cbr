@@ -1,7 +1,6 @@
 #!/bin/sh 
 rm \
 	bin/AddCase.class \
-	bin/AddCaseBase.class \
 	bin/AllCases.class \
 	bin/Case.class \
 	bin/CaseBase.class \
@@ -9,6 +8,7 @@ rm \
 	bin/CaseLambda.class \
 	bin/CBRExtension.class \
 	bin/Closer.class \
+	bin/CombineCaseBases.class \
 	bin/Comparable.class \
 	bin/Decision.class \
 	bin/Equal.class \

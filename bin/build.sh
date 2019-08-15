@@ -8,7 +8,6 @@ fi
 
 "$JAR" cvmf ../jar-manifest.txt ../test/cbr/cbr.jar \
 	AddCase.class \
-	AddCaseBase.class \
 	AllCases.class \
 	Case.class \
 	CaseBase.class \
@@ -16,6 +15,7 @@ fi
 	CaseLambda.class \
 	CBRExtension.class \
 	Closer.class \
+	CombineCaseBases.class \
 	Comparable.class \
 	Decision.class \
 	Equal.class \

@@ -22,7 +22,7 @@ public class CBRExtension extends DefaultClassManager {
 		//primManager.addPrimitive("from-list", new FromList());
 		primManager.addPrimitive("new", new New());
 		primManager.addPrimitive("add", new AddCase());
-		primManager.addPrimitive("add-case-base", new AddCaseBase());
+		primManager.addPrimitive("combine", new CombineCaseBases());
 		primManager.addPrimitive("all", new AllCases());
 		primManager.addPrimitive("remove", new Remove());
 		primManager.addPrimitive("state", new State());
