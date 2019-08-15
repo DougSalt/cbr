@@ -30,6 +30,6 @@ public class AddCase implements Reporter
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.ListType(), Syntax.WildcardType(), Syntax.ListType() }, Syntax.WildcardType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType() }, Syntax.WildcardType());
 	}
 }

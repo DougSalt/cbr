@@ -65,3 +65,4 @@ bin/clean.sh 2>/dev/null
     src/SetRank.java \
     src/SetTime.java \
     src/State.java \
+    src/Yes.java

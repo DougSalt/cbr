@@ -92,7 +92,7 @@ to setup
   ; The vat-grown beef: what we are really here for
 
   show (word "The length before the match is  = " length cbr:all case-base)
-  let result cbr:match case-base some-state-3 some-decision-3 some-outcome-3
+  let result cbr:match case-base some-state-3 some-decision-3
   show (word "Dun, dun, dah - the result is " result)
 end
 

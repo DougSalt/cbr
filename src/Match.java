@@ -16,8 +16,8 @@ public class Match implements Reporter
 
 			Object state = args[1].get();
 			Object activity = args[2].get();
-			Object outcome = args[3].get();
 			Double time = context.getAgent().world().ticks();
+            Object outcome = Nobody$.MODULE$;
 
             // Create a temporary case to allow the use of the comparator.
 			NetLogoCase ref = new NetLogoCase(state, activity, outcome, time);
@@ -72,6 +72,6 @@ public class Match implements Reporter
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType() }, Syntax.WildcardType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType(), Syntax.WildcardType() }, Syntax.WildcardType());
 	}
 }

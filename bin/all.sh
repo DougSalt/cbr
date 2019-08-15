@@ -10,4 +10,4 @@ then
     echo "$0: Build failed"
     exit 1
 fi
-bin/run.sh
+bin/test.sh
