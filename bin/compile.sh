@@ -41,8 +41,6 @@ bin/clean.sh 2>/dev/null
     src/AllCases.java \
     src/CBRExtension.java \
     src/CaseLambda.java \
-    src/Closer.java \
-    src/Comparable.java \
     src/Decision.java \
     src/Equal.java \
     src/Forget.java \
@@ -59,7 +57,6 @@ bin/clean.sh 2>/dev/null
     src/Outcome.java \
     src/Remove.java \
     src/Resize.java \
-    src/Same.java \
     src/SetEarliest.java \
     src/SetMaxSize.java \
     src/SetRank.java \

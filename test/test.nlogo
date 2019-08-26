@@ -1,6 +1,6 @@
 extensions [ cbr table ]
 
-to setup
+to test
 
   let case-base cbr:new
   let some-state-1 ["state-1" "state-2" "state-3"]
@@ -41,9 +41,9 @@ to setup
 
   show "storing lambda"
   cbr:lambda case-base comparator
-  show (word "cbr:closer - " cbr:closer case-base some-case-1 some-case-2 some-case-3)
-  show (word "cbr:comparable - " cbr:comparable case-base some-case-1 some-case-2 some-case-3)
-  show (word "cbr:same - " cbr:same case-base some-case-1 some-case-2 some-case-3)
+;  show (word "cbr:closer - " cbr:closer case-base some-case-1 some-case-2 some-case-3)
+;  show (word "cbr:comparable - " cbr:comparable case-base some-case-1 some-case-2 some-case-3)
+;  show (word "cbr:same - " cbr:same case-base some-case-1 some-case-2 some-case-3)
 
   ; Setting Time
 
@@ -94,6 +94,27 @@ to setup
   show (word "The length before the match is  = " length cbr:all case-base)
   let result cbr:match case-base some-state-3 some-decision-3
   show (word "Dun, dun, dah - the result is " result)
+
+  let some-state-6 ["state-1" "state-2" "state-3"]
+  let some-state-7 ["state-1" "state-4" "state-5"]
+  let some-state-8 ["state-1" "state-2" "state-6"]
+  let some-state-9 ["state-1" "state-2" "state-3"]
+  let some-outcome-6 ["install-6"]
+  let some-outcome-7 ["install-7"]
+  let some-outcome-8 ["install-8"]
+  let some-outcome-9 ["install-9"]
+  let some-decision-6 [true true true]
+  let some-decision-7 [true true false]
+  let some-decision-8 [true false true]
+  let some-decision-9 [true false false]
+
+  let other-case-base cbr:new
+  let some-case-6 cbr:add other-case-base some-state-6 some-outcome-6 some-decision-6
+  let some-case-7 cbr:add other-case-base some-state-7 some-outcome-7 some-decision-7
+  let some-case-8 cbr:add other-case-base some-state-8 some-outcome-8 some-decision-8
+  let some-case-9 cbr:add other-case-base some-state-9 some-outcome-9 some-decision-9
+
+  let sum-of-case-bases cbr:combine case-base other-case-base
 end
 
 to-report comparator [some-case-base case-1 case-2 case-3]
@@ -187,7 +208,7 @@ BUTTON
 109
 81
 NIL
-setup
+test
 NIL
 1
 T

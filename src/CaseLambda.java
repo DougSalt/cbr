@@ -21,8 +21,8 @@ public class CaseLambda implements Command
 				caseBase.setCaseLambda(reporter);
 
 				//TODO: We also need to do some validation of the Reporter
-                // My feeliing is we could do this with some dummy values
-                // or some kind of scan of the code.
+                // My feeling is we could do this with some kind of scan of 
+                // the code.
 			}
 			else
 			{

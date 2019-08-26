@@ -82,6 +82,11 @@ public class Case {
 	}
 
 
+    public Case clone() 
+    {
+       return new Case( this.state, this.activity, this.outcome, this.ticks );
+    }
+
 //	public boolean matches(Feature<?>.Value... queries) {
 //		for(Feature<?>.Value query : queries) {
 //			if(!state.matches(query)) {

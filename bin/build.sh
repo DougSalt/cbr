@@ -14,9 +14,7 @@ fi
 	CaseBaseException.class \
 	CaseLambda.class \
 	CBRExtension.class \
-	Closer.class \
 	CombineCaseBases.class \
-	Comparable.class \
 	Decision.class \
 	Equal.class \
 	Forget.class \
@@ -33,10 +31,11 @@ fi
 	Outcome.class \
 	Remove.class \
 	Resize.class \
-	Same.class \
 	SetEarliest.class \
 	SetMaxSize.class \
 	SetRank.class \
 	SetTime.class \
 	State.class \
 	Yes.class \
+
+cp ../test/cbr/cbr.jar ~/git/smartees/Fuel\ Poverty/Aberdeen/cbr

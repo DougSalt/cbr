@@ -7,9 +7,7 @@ rm \
 	bin/CaseBaseException.class \
 	bin/CaseLambda.class \
 	bin/CBRExtension.class \
-	bin/Closer.class \
 	bin/CombineCaseBases.class \
-	bin/Comparable.class \
 	bin/Decision.class \
 	bin/Equal.class \
 	bin/Forget.class \
@@ -26,7 +24,6 @@ rm \
 	bin/Outcome.class \
 	bin/Remove.class \
 	bin/Resize.class \
-	bin/Same.class \
 	bin/SetEarliest.class \
 	bin/SetMaxSize.class \
 	bin/SetRank.class \
