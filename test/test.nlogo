@@ -93,10 +93,10 @@ to test
 
   show (word "The length before the match is  = " length cbr:all case-base)
   let result cbr:match case-base some-state-3 some-decision-3
-  show (word "Dun, dun, dah - the result is " result)
+  show (word "Dum, dum, da - the result is " result)
 
   let some-state-6 ["state-1" "state-2" "state-3"]
-  let some-state-7 ["state-1" "state-4" "state-5"]
+  let some-state-7 ["state-1" "state-2" "state-3"]
   let some-state-8 ["state-1" "state-2" "state-6"]
   let some-state-9 ["state-1" "state-2" "state-3"]
   let some-outcome-6 ["install-6"]
@@ -114,7 +114,15 @@ to test
   let some-case-8 cbr:add other-case-base some-state-8 some-outcome-8 some-decision-8
   let some-case-9 cbr:add other-case-base some-state-9 some-outcome-9 some-decision-9
 
-  let sum-of-case-bases cbr:combine case-base other-case-base
+  show (word "Before combining then the original case-base had " length cbr:all case-base " cases.")
+  cbr:combine case-base other-case-base
+  show (word "After combining then the original case-base has " length cbr:all case-base " cases.")
+
+  ; This should return 3 matches
+  let results cbr:matches case-base some-state-7 "armpits"
+  foreach results [ i ->
+    show (word "A match might be " i)
+  ]
 end
 
 to-report comparator [some-case-base case-1 case-2 case-3]

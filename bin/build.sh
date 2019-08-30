@@ -24,6 +24,7 @@ fi
 	GetTime.class \
 	Invalid.class \
 	Match.class \
+    Matches.class \
 	NetLogoCase.class \
 	NetLogoCaseBase.class \
 	New.class \

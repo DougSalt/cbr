@@ -2,6 +2,7 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.api.AnonymousReporter;
 import org.nlogo.core.*;
+import org.nlogo.core.FrontEndProcedure;
 
 public class CaseLambda implements Command
 {
@@ -18,11 +19,12 @@ public class CaseLambda implements Command
 			{
 				//Reporter reporter = (Reporter) args[1].getReporter();
 				AnonymousReporter reporter = args[1].getReporter();
-				caseBase.setCaseLambda(reporter);
-
+                FrontEndProcedure someProcedure = reporter;
+                System.err.println("argle " + someProcedure.dump());
 				//TODO: We also need to do some validation of the Reporter
                 // My feeling is we could do this with some kind of scan of 
                 // the code.
+				caseBase.setCaseLambda(reporter);
 			}
 			else
 			{

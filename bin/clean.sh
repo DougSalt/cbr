@@ -17,6 +17,7 @@ rm \
 	bin/GetTime.class \
 	bin/Invalid.class \
 	bin/Match.class \
+    bin/Matches.class \
 	bin/NetLogoCase.class \
 	bin/NetLogoCaseBase.class \
 	bin/New.class \

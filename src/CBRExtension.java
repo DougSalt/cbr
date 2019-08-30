@@ -41,6 +41,7 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("resize", new Resize());
 		primManager.addPrimitive("lambda", new CaseLambda());
 		primManager.addPrimitive("match", new Match());
+		primManager.addPrimitive("matches", new Matches());
 		primManager.addPrimitive("yes",  new Yes());
 		primManager.addPrimitive("no", new No());
 		primManager.addPrimitive("invalid", new Invalid());

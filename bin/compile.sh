@@ -50,6 +50,7 @@ bin/clean.sh 2>/dev/null
     src/GetTime.java \
     src/Invalid.java \
     src/Match.java \
+    src/Matches.java \
     src/NetLogoCase.java \
     src/NetLogoCaseBase.java \
     src/New.java \
