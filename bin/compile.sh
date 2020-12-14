@@ -16,7 +16,8 @@
 # Note that I am using a named removed in the clean, because there might be
 # other stuff that this shouldn't clean - I am talking to you eclipse IDE.
 
-JAVAC=javac
+#JAVAC=javac
+JAVAC=/usr/lib/jvm/java-8-openjdk/bin/javac
 CLASS_PATH=lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
