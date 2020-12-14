@@ -1,12 +1,14 @@
 /**
- * 
+ *
  */
 
 import org.nlogo.api.DefaultClassManager;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
 import org.nlogo.api.PrimitiveManager;
+import org.nlogo.api.ImportErrorHandler;
 import org.nlogo.core.ExtensionObject;
+import java.util.List;
 
 import java.io.*;
 
@@ -62,12 +64,12 @@ public class CBRExtension extends DefaultClassManager {
 			//else if(typeName.equals(NetLogoCase.typeName)) {
 		    //		return new NetLogoCase(value);
 			//}
-			//else 
+			//else
 //            if(typeName.equals(NetLogoFeature.typeName)) {
 //				return new NetLogoFeature(value);
 //			}
 //			else if(typeName.equals(NetLogoFeatureValue.typeName)) {
-//				return new NetLogoFeatureValue(value);			
+//				return new NetLogoFeatureValue(value);
 //			}
 //			else if(typeName.equals(NetLogoFeatureSet.typeName)) {
 //				return new NetLogoFeatureSet(value);
@@ -86,4 +88,20 @@ public class CBRExtension extends DefaultClassManager {
 
 //		throw new ExtensionException("Unknown extension type");
 //	}
+
+		@Override
+		public void clearAll() {
+			// TODO
+		}
+
+		@Override
+		public StringBuilder exportWorld() {
+			//TODO
+			return new StringBuilder();
+		}
+
+		@Override
+		public void importWorld(List<String[]> lines, ExtensionManager reader, ImportErrorHandler handler) {
+			//TODO
+		}
 }
