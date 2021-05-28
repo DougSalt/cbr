@@ -34,7 +34,8 @@ public class Match implements Reporter
             Case[] cases = caseBase.toArray(new Case[caseBase.size()]);
             if (cases.length > 1) {
                 Case obj  = cases[0];
-                for (int i = 1; i < cases.length; i++) {
+                // One less because the last case is the reference case
+                for (int i = 1; i < cases.length - 1; i++) {
                     Case src = (Case)cases[i];
                     Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
                     Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
