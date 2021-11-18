@@ -17,7 +17,7 @@ public class GetRank implements Reporter
 
 				if (caseBase.contains(logoCase))
 				{
-					return String.valueOf(logoCase.getTime());
+					return String.valueOf(logoCase.getRank());
 				}
 				else
 				{

@@ -54,8 +54,14 @@ public class Match implements Reporter
                             result = src;
                             obj = src;
                         }
-                        else {
-                            result = obj;
+                        else { 
+                            if (src.getTime() < obj.getTime()) {
+                                result = src;
+                                obj = src;
+                            }
+                            else {
+                                result = obj;
+                            }
                         }
                     }
 

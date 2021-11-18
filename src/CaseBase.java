@@ -73,6 +73,7 @@ public class CaseBase implements Collection<Case> {
 //	}
 
     public void addCase(Case c) {
+		base.ensureCapacity(base.size() + 1);
         base.add(c);
     }
 
