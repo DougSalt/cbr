@@ -36,3 +36,5 @@ tex2pdf.*
 # Sbt stuff
 
 target/
+
+.*.nlogo
