@@ -3,7 +3,7 @@ cd bin
 JAR=jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
-    JAR='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/jar'
+    JAR='/cygdrive/c/Java/jdk-17.0.1/bin/jar'
 fi
 
 "$JAR" cvmf ../jar-manifest.txt ../test/cbr/cbr.jar \
@@ -22,13 +22,14 @@ fi
 	GetMaxSize.class \
 	GetRank.class \
 	GetTime.class \
-	Invalid.class \
+	GreaterThan.class \
+	Incomparable.class \
+	LessThan.class \
 	Match.class \
     Matches.class \
 	NetLogoCase.class \
 	NetLogoCaseBase.class \
 	New.class \
-	No.class \
 	Outcome.class \
 	Remove.class \
 	Resize.class \
@@ -36,7 +37,6 @@ fi
 	SetMaxSize.class \
 	SetRank.class \
 	SetTime.class \
-	State.class \
-	Yes.class \
+	State.class
 
 cp ../test/cbr/cbr.jar ~/git/smartees/Fuel\ Poverty/Aberdeen/cbr

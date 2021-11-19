@@ -21,13 +21,12 @@ to run-tests
   let decisions (list some-decision-1 some-decision-2 some-decision-3 some-decision-4 )
   let outcomes (list some-outcome-1 some-outcome-2 some-outcome-3 some-outcome-4 )
   reset-ticks
-
   ; Constants
 
   test cbr:no "no" "cbr:no"
-  test cbr:yes "yes" "cbr:yes"
-  test cbr:equal "equal" "cbr:equal"
-  test cbr:invalid "invalid" "cbr:invalid"
+  test cbr:lt "yes" "cbr:lt"
+  test cbr:eq "equal" "cbr:eq"
+  test cbr:incmp "invalid" "cbr:incmp"
 
   tick
   let some-case-1 cbr:add case-base some-state-1 some-decision-1 some-outcome-1
@@ -48,9 +47,9 @@ to run-tests
   ; Lambda
 
   cbr:lambda case-base comparator
-  test comparator case-base some-case-1 some-invalid-case some-case-3 cbr:invalid "cbr:invalid, i.e. just plain wrong"
-  test comparator case-base some-case-1 some-case-1 some-case-3 cbr:equal "cbr:equal, i.e. equally distant"
-  test comparator case-base some-case-1 some-case-2 some-case-3 cbr:yes "cbr:yes, i.e. closer distance"
+  test comparator case-base some-case-1 some-invalid-case some-case-3 cbr:incmp "cbr:incmp, i.e. just plain wrong"
+  test comparator case-base some-case-1 some-case-1 some-case-3 cbr:eq "cbr:eq, i.e. equally distant"
+  test comparator case-base some-case-1 some-case-2 some-case-3 cbr:lt "cbr:lt, i.e. closer distance"
   test comparator case-base some-case-2 some-case-1 some-case-3 cbr:no "cbr:no, i.e. further distant"
 
   ; Remove the dodgy case
@@ -169,21 +168,21 @@ to-report comparator [some-case-base yes-case no-case reference-case]
 
   if (cbr:decision some-case-base yes-case != cbr:decision some-case-base no-case and
     cbr:decision some-case-base yes-case != cbr:decision some-case-base reference-case) [
-    report cbr:invalid
+    report cbr:incmp
   ]
   if not is-list? yes-state or not is-list? no-state or not is-list? reference-state [
-    report cbr:invalid
+    report cbr:incmp
   ]
   if length yes-state != length no-state  [
-    report cbr:invalid
+    report cbr:incmp
   ]
   if length no-state != length reference-state [
-    report cbr:invalid
+    report cbr:incmp
   ]
   if (item 0 yes-state = item 0 no-state and
       item 1 yes-state = item 1 no-state and
       item 2 yes-state = item 2 no-state) [
-    report cbr:equal
+    report cbr:eq
   ]
 
   let comparison-1-and-3 0
@@ -199,10 +198,10 @@ to-report comparator [some-case-base yes-case no-case reference-case]
     ]
   ]
   if comparison-1-and-3 = 0 and comparison-2-and-3 = 0 [
-    report cbr:invalid
+    report cbr:incmp
   ]
   if comparison-1-and-3 > comparison-2-and-3 [
-    report cbr:yes
+    report cbr:lt
   ]
   report cbr:no
 end
@@ -314,10 +313,10 @@ A NetLogo case consists of a state in any of the standard Netlogo variables, suc
 
 are relative to ecah other. That is, if: 
 
-+ the yes-case is 'closer' to the reference-case than the no-case using `cbr:lamda`  to the reference-case then `cbr:yes` is returned
-+ the no-case is 'closer' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:no` is returned
-+ the no-case is 'same distance' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:equal` is returned
-+ the no-case is 'closer' using `cbr:lamda`  to the reference-case then `cbr:yes` is returned
++ the yes-case is 'closer' to the reference-case than the no-case using `cbr:lamda`  to the reference-case then `cbr:lt` is returned
++ the no-case is 'closer' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:gt` is returned
++ the no-case is 'same distance' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:eq` is returned
++ the no-case is 'closer' using `cbr:lamda`  to the reference-case then `cbr:lt` is returned
 
 The `cbr:lamda` is then used by `cbr:match` to determine a single closest match of a "hypothetical" case that is presented to `cbr:match` which consists of a state and decison and returning the 'best match' base on the repeated use of `cbr:lamda` to determine which is the closest match. If the match does not meet a suitabl criterion then 
 
@@ -509,10 +508,10 @@ This is the reporter that does distance comparison. This is never called directl
 
 This *must* return one of the following
 
-+ `cbr:yes`
-+ `cbr:no`
-+ `cbr:invalid`
-+ `cbr:equal`
++ `cbr:lt`
++ `cbr:gt`
++ `cbr:incmp`
++ `cbr:eq`
 
 he current represantion that `cbr:lamda` must return if of the three cases
 
@@ -522,7 +521,7 @@ he current represantion that `cbr:lamda` must return if of the three cases
 
 when the yes-case and no-case "are an equal distance" from the reference case.
 
-### cbr:equal
+### cbr:eq
 
 This is used to standardise response from `cbr:lamda` so `cbr:match` will work correctly with it.
 
@@ -536,7 +535,7 @@ The current represantion that `cbr:lamda` must return if of the three cases
 
 when the yes-case is "equal"  distance from the reference case as the no-case.
 
-### cbr:no
+### cbr:gt
 
 This is used to standardise response from `cbr:lamda` so `cbr:match` will work correctly with it.
 
@@ -554,7 +553,7 @@ The current represantion that `cbr:lamda` must return if of the three cases
 
 when the yes-case is "further" from the reference case than the no-case.
 
-### cbr:yes
+### cbr:lt
 
 This is used to standardise response from `cbr:lamda` so `cbr:match` will work correctly with it.
 
@@ -572,7 +571,7 @@ The current represantion that `cbr:lamda` must return if of the three cases
 
 when the yes-case is "closer" to the reference case than the no-case.
 
-### cbr:invalid
+### cbr:incmp
 
 #### Parameters
 

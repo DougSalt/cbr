@@ -21,7 +21,7 @@ JAVAC=/usr/lib/jvm/java-8-openjdk/bin/javac
 CLASS_PATH=lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
-    JAVAC='/cygdrive/c/Program Files/Java/jdk1.8.0_77/bin/javac'
+    JAVAC='/cygdrive/c/Java/jdk-17.0.1/bin/javac'
     CLASS_PATH="bin;lib\netlogo-6.1.0.jar;lib\scala-library.jar"
 fi
 
@@ -49,13 +49,14 @@ bin/clean.sh 2>/dev/null
     src/GetMaxSize.java \
     src/GetRank.java \
     src/GetTime.java \
-    src/Invalid.java \
+    src/GreaterThan.java \
+    src/Incomparable.java \
+    src/LessThan.java \
     src/Match.java \
     src/Matches.java \
     src/NetLogoCase.java \
     src/NetLogoCaseBase.java \
     src/New.java \
-    src/No.java \
     src/Outcome.java \
     src/Remove.java \
     src/Resize.java \
@@ -63,5 +64,4 @@ bin/clean.sh 2>/dev/null
     src/SetMaxSize.java \
     src/SetRank.java \
     src/SetTime.java \
-    src/State.java \
-    src/Yes.java
+    src/State.java 
