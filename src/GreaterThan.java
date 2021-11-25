@@ -8,7 +8,7 @@ public class GreaterThan implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return CaseBase.NO;
+		return CaseBase.GREATER_THAN;
 	}
 
 	@Override

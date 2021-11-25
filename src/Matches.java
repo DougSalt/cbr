@@ -39,14 +39,14 @@ public class Matches implements Reporter
                     Case src = (Case)cases[i];
                     Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
                     Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-                    if (CaseBase.INVALID.equalsIgnoreCase(answer.toString())) {
+                    if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
                         continue;
                     }
-                    else if (CaseBase.YES.equalsIgnoreCase(answer.toString())) {
+                    else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {
                         obj = src;
                         result = LogoList.Empty().lput(src);
                     }
-                    else if (CaseBase.NO.equalsIgnoreCase(answer.toString())) {
+                    else if (CaseBase.GREATER_THAN.equalsIgnoreCase(answer.toString())) {
                         result = LogoList.Empty().lput(obj);
                     }
                     else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
@@ -54,8 +54,9 @@ public class Matches implements Reporter
                             result = LogoList.Empty().lput(src);
                             obj = src;
                         }
-                        else if (src.getRank() == obj.getRank()) {
-                            result.lput((Object)obj);
+                        else if (src.getRank().equals(obj.getRank())) {
+                            System.err.println("Got here " + src.getRank() + " " + obj.getRank());
+                            result.lput((Object)src).lput((Object)obj);
                         }
                         else {
                             result = LogoList.Empty().lput(obj);

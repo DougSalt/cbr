@@ -8,7 +8,7 @@ public class LessThan implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return CaseBase.YES;
+		return CaseBase.LESS_THAN;
 	}
 
 	@Override

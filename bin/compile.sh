@@ -43,15 +43,20 @@ bin/clean.sh 2>/dev/null
     src/CBRExtension.java \
     src/CaseLambda.java \
     src/Decision.java \
+    src/DefaultComparator.java \
     src/Equal.java \
+    src/EqualBoolean.java \
     src/Forget.java \
     src/GetEarliest.java \
     src/GetMaxSize.java \
     src/GetRank.java \
     src/GetTime.java \
     src/GreaterThan.java \
+    src/GreaterThanBoolean.java \
     src/Incomparable.java \
+    src/IncomparableBoolean.java \
     src/LessThan.java \
+    src/LessThanBoolean.java \
     src/Match.java \
     src/Matches.java \
     src/NetLogoCase.java \

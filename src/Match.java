@@ -25,12 +25,6 @@ public class Match implements Reporter
             Object result = Nobody$.MODULE$;
 			caseBase.addCase(ref);
 
-            if (caseBase.getMaxSize() < Integer.MAX_VALUE) {
-                caseBase.imposeSizeLimit(caseBase.getMaxSize());
-            }
-
-            caseBase.forgetCasesOlderThanTickInfimum();
-
             Case[] cases = caseBase.toArray(new Case[caseBase.size()]);
             if (cases.length > 1) {
                 Case obj  = cases[0];
@@ -39,14 +33,14 @@ public class Match implements Reporter
                     Case src = (Case)cases[i];
                     Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
                     Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-                    if (CaseBase.INVALID.equalsIgnoreCase(answer.toString())) {
+                    if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
                         continue;
                     }
-                    else if (CaseBase.YES.equalsIgnoreCase(answer.toString())) {
+                    else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {
                         obj = src;
                         result = src;
                     }
-                    else if (CaseBase.NO.equalsIgnoreCase(answer.toString())) {
+                    else if (CaseBase.GREATER_THAN.equalsIgnoreCase(answer.toString())) {
                         result = obj;
                     }
                     else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {

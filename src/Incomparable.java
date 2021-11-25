@@ -8,7 +8,7 @@ public class Incomparable implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		return CaseBase.INVALID;
+		return CaseBase.INCOMPARABLE;
 	}
 
 	@Override

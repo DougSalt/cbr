@@ -29,7 +29,6 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("remove", new Remove());
 		primManager.addPrimitive("state", new State());
 		primManager.addPrimitive("decision", new Decision());
-		primManager.addPrimitive("eq", new Equal());
 		primManager.addPrimitive("outcome", new Outcome());
 		primManager.addPrimitive("forget", new Forget());
 		primManager.addPrimitive("get-earliest", new GetEarliest());
@@ -44,9 +43,14 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("lambda", new CaseLambda());
 		primManager.addPrimitive("match", new Match());
 		primManager.addPrimitive("matches", new Matches());
+		primManager.addPrimitive("eq", new Equal());
+		primManager.addPrimitive("eq?", new EqualBoolean());
 		primManager.addPrimitive("lt",  new LessThan());
+		primManager.addPrimitive("lt?",  new LessThanBoolean());
 		primManager.addPrimitive("gt", new GreaterThan());
+		primManager.addPrimitive("gt?", new GreaterThanBoolean());
 		primManager.addPrimitive("incmp", new Incomparable());
+		primManager.addPrimitive("incmp?", new IncomparableBoolean());
 	}
 
 	@Override

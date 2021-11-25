@@ -23,10 +23,10 @@ to run-tests
   reset-ticks
   ; Constants
 
-  test cbr:no "no" "cbr:no"
-  test cbr:lt "yes" "cbr:lt"
+  test cbr:gt "greater than" "cbr:gt"
+  test cbr:lt "less than" "cbr:lt"
   test cbr:eq "equal" "cbr:eq"
-  test cbr:incmp "invalid" "cbr:incmp"
+  test cbr:incmp "incomparable" "cbr:incmp"
 
   tick
   let some-case-1 cbr:add case-base some-state-1 some-decision-1 some-outcome-1
@@ -50,7 +50,17 @@ to run-tests
   test comparator case-base some-case-1 some-invalid-case some-case-3 cbr:incmp "cbr:incmp, i.e. just plain wrong"
   test comparator case-base some-case-1 some-case-1 some-case-3 cbr:eq "cbr:eq, i.e. equally distant"
   test comparator case-base some-case-1 some-case-2 some-case-3 cbr:lt "cbr:lt, i.e. closer distance"
-  test comparator case-base some-case-2 some-case-1 some-case-3 cbr:no "cbr:no, i.e. further distant"
+  test comparator case-base some-case-2 some-case-1 some-case-3 cbr:gt "cbr:gt, i.e. further distant"
+
+  test cbr:lt? case-base some-case-1 some-case-2 some-case-3 true "cbr:lt?"
+  test cbr:lt? case-base some-case-2 some-case-1 some-case-3 false "cbr:lt?"
+  test cbr:gt? case-base some-case-2 some-case-1 some-case-3 true "cbr:gt?"
+  test cbr:gt? case-base some-case-1 some-case-2 some-case-3 false "cbr:gt?"
+  test cbr:eq? case-base some-case-1 some-case-4 some-case-3 true "cbr:eq?"
+  test cbr:eq? case-base some-case-1 some-case-2 some-case-3 false "cbr:eq?"
+
+  test cbr:incmp? case-base some-case-1 some-case-2 some-case-3 false "cbr:incmp?"
+  test cbr:incmp? case-base some-case-1 some-case-2 some-invalid-case true "cbr:incmp?"
 
   ; Remove the dodgy case
 
@@ -72,7 +82,15 @@ to run-tests
   ; Doing multiple matches
 
   let my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  show length my-matches
+  test length my-matches 1 "cbr:matches"
+
+  cbr:set-rank case-base some-case-4 0
+  test cbr:get-rank case-base some-case-4 "0.0" "cbr-set-rank"
+
+  set my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
+  output-print length my-matches
+  output-print my-matches
+  test length my-matches 2 "cbr:matches"
 
   ; Setting Time
 
@@ -106,7 +124,6 @@ to run-tests
   test length cbr:all case-base 2 "cbr:all should return 2"
 
   output-print "cbr: ...ending tests."
-  stop
 
 
 ;  ; Tables
@@ -203,7 +220,7 @@ to-report comparator [some-case-base yes-case no-case reference-case]
   if comparison-1-and-3 > comparison-2-and-3 [
     report cbr:lt
   ]
-  report cbr:no
+  report cbr:gt
 end
 
 to test [actual-value expected-value message]

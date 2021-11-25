@@ -44,9 +44,9 @@ public class CaseBase implements Collection<Case> {
 
 	private AnonymousReporter caseLambda = null;
 
-    public static final String YES = "yes";
-    public static final String NO = "no";
-    public static final String INVALID = "invalid";
+    public static final String LESS_THAN = "less than";
+    public static final String GREATER_THAN = "greater than";
+    public static final String INCOMPARABLE = "incomparable";
     public static final String EQUAL = "equal";
 	/*
 	 * Have a think about tick list and whether that could be maintained.
@@ -323,7 +323,7 @@ public class CaseBase implements Collection<Case> {
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
 		Object result = caseLambda.report(context,convertedArgs);
-		return YES.equalsIgnoreCase(result.toString());
+		return LESS_THAN.equalsIgnoreCase(result.toString());
 	}
 
 	public boolean isComparable(Argument[] args, Context context)
@@ -335,6 +335,6 @@ public class CaseBase implements Collection<Case> {
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
 		Object result = caseLambda.report(context,convertedArgs);
-		return !NO.equalsIgnoreCase(result.toString());
+		return !GREATER_THAN.equalsIgnoreCase(result.toString());
 	}
 }

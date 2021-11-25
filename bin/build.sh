@@ -17,14 +17,18 @@ fi
 	CombineCaseBases.class \
 	Decision.class \
 	Equal.class \
+	EqualBoolean.class \
 	Forget.class \
 	GetEarliest.class \
 	GetMaxSize.class \
 	GetRank.class \
 	GetTime.class \
 	GreaterThan.class \
+	GreaterThanBoolean.class \
 	Incomparable.class \
+	IncomparableBoolean.class \
 	LessThan.class \
+	LessThanBoolean.class \
 	Match.class \
     Matches.class \
 	NetLogoCase.class \
