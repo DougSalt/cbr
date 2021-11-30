@@ -44,6 +44,7 @@ bin/clean.sh 2>/dev/null
     src/CaseLambda.java \
     src/Decision.java \
     src/DefaultComparator.java \
+    src/DefaultComparatorInterface.java \
     src/Equal.java \
     src/EqualBoolean.java \
     src/Forget.java \

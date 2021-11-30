@@ -46,7 +46,7 @@ to run-tests
 
   ; Lambda
 
-  cbr:lambda case-base comparator
+  ;cbr:lambda case-base comparator
   test comparator case-base some-case-1 some-invalid-case some-case-3 cbr:incmp "cbr:incmp, i.e. just plain wrong"
   test comparator case-base some-case-1 some-case-1 some-case-3 cbr:eq "cbr:eq, i.e. equally distant"
   test comparator case-base some-case-1 some-case-2 some-case-3 cbr:lt "cbr:lt, i.e. closer distance"
@@ -88,8 +88,6 @@ to run-tests
   test cbr:get-rank case-base some-case-4 "0.0" "cbr-set-rank"
 
   set my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  output-print length my-matches
-  output-print my-matches
   test length my-matches 2 "cbr:matches"
 
   ; Setting Time

@@ -21,7 +21,6 @@ public class Match implements Reporter
 
             // Create a temporary case to allow the use of the comparator.
 			NetLogoCase ref = new NetLogoCase(state, activity, outcome, time);
-            // Er I, dunno - go figure
             Object result = Nobody$.MODULE$;
 			caseBase.addCase(ref);
 
@@ -31,9 +30,16 @@ public class Match implements Reporter
                 // One less because the last case is the reference case
                 for (int i = 1; i < cases.length - 1; i++) {
                     Case src = (Case)cases[i];
-                    Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
-                    Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-                    if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
+                    Object answer = null;
+                    if ( caseBase.getCaseLambda() == null ) {
+                        answer = caseBase.defaultLambda(src, obj, ref);
+                    } else {
+                        Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
+                        answer = caseBase.getCaseLambda().report(context, lambdaArgs);
+                    }
+                    if (src.getOutcome() == Nobody$.MODULE$) {
+                        continue;
+                    } else if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
                         continue;
                     }
                     else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {

@@ -1,14 +1,15 @@
 import org.nlogo.api.*;
 import org.nlogo.core.*;
-import org.nlogo.core.Reporter;
+import org.nlogo.api.Reporter;
 import java.util.*;
+import org.nlogo.agent.*;
 
 import java.time.*;
 
-public class DefaultComparator implements Reporter
+public final class DefaultComparator implements Reporter, DefaultComparatorInterface
 {
 	@Override
-	public Object report(Argument[] args, Context context)
+	public static Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
 		if (args[0].get() instanceof NetLogoCaseBase) {
@@ -81,15 +82,11 @@ public class DefaultComparator implements Reporter
 
                 return new Equal();
 
-             } else if (a instanceof AgentSet) {
+             } else if (a instanceof ArrayAgentSet) {
 
-                 AgentSet aAgentSet = (AgentSet) a;
-                 LogoList aList = aAgentSet.toLogoList();
-
-/*
-                LogoList aList = ((AgentSet) a).toLogoList();
-                LogoList bList = ((AgentSet) b).toLogoList();
-                LogoList rList = ((AgentSet) r).toLogoList();
+                 LogoList aList = ((ArrayAgentSet) a).toLogoList();
+                 LogoList bList = ((ArrayAgentSet) b).toLogoList();
+                 LogoList rList = ((ArrayAgentSet) r).toLogoList();
 
                 LogoList anrList = (LogoList) aList.intersect(rList);
                 if (anrList.isEmpty())
@@ -113,7 +110,7 @@ public class DefaultComparator implements Reporter
                     return new LessThan();
 
                 return new Equal();
-*/
+
             } else if (a instanceof String) {
 
                 Set aSet = convertToSet((String) a);

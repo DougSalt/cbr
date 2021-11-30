@@ -26,20 +26,25 @@ public class Matches implements Reporter
             LogoList result = LogoList.Empty();
 			caseBase.addCase(ref);
 
-            if (caseBase.getMaxSize() < Integer.MAX_VALUE) {
-                caseBase.imposeSizeLimit(caseBase.getMaxSize());
-            }
+            //if (caseBase.getMaxSize() < Integer.MAX_VALUE) {
+            //    caseBase.imposeSizeLimit(caseBase.getMaxSize());
+            //}
 
-            caseBase.forgetCasesOlderThanTickInfimum();
+            //caseBase.forgetCasesOlderThanTickInfimum();
 
             Case[] cases = caseBase.toArray(new Case[caseBase.size()]);
             if (cases.length > 1) {
                 Case obj  = cases[0];
+                result = result.lput(obj);
                 for (int i = 1; i < cases.length; i++) {
                     Case src = (Case)cases[i];
                     Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
                     Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-                    if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
+                    System.err.println("pickle " + result);
+                    if (src.getOutcome() == Nobody$.MODULE$) {
+                        continue;
+                    }
+                    else if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
                         continue;
                     }
                     else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {
@@ -47,7 +52,7 @@ public class Matches implements Reporter
                         result = LogoList.Empty().lput(src);
                     }
                     else if (CaseBase.GREATER_THAN.equalsIgnoreCase(answer.toString())) {
-                        result = LogoList.Empty().lput(obj);
+                        continue;
                     }
                     else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
                         if (src.getRank() > obj.getRank()) {
@@ -55,14 +60,13 @@ public class Matches implements Reporter
                             obj = src;
                         }
                         else if (src.getRank().equals(obj.getRank())) {
-                            System.err.println("Got here " + src.getRank() + " " + obj.getRank());
-                            result.lput((Object)src).lput((Object)obj);
+                            result = result.lput((Object)src);
                         }
                         else {
-                            result = LogoList.Empty().lput(obj);
+                            result = LogoList.Empty().lput(src);
+                            obj = src;
                         }
                     }
-
                 }
             }
 
