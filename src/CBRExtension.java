@@ -51,7 +51,6 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("gt?", new GreaterThanBoolean());
 		primManager.addPrimitive("incmp", new Incomparable());
 		primManager.addPrimitive("incmp?", new IncomparableBoolean());
-		primManager.addPrimitive("default-comparator", new DefaultComparator());
 	}
 
 	@Override

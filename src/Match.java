@@ -28,7 +28,7 @@ public class Match implements Reporter
             if (cases.length > 1) {
                 Case obj  = cases[0];
                 // One less because the last case is the reference case
-                for (int i = 1; i < cases.length - 1; i++) {
+                for (int i = 0; i < cases.length - 1; i++) {
                     Case src = (Case)cases[i];
                     Object answer = null;
                     if ( caseBase.getCaseLambda() == null ) {
@@ -39,32 +39,28 @@ public class Match implements Reporter
                     }
                     if (src.getOutcome() == Nobody$.MODULE$) {
                         continue;
-                    } else if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
+                    } else if (answer instanceof Incomparable) {
                         continue;
-                    }
-                    else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {
+                    } else if (answer instanceof LessThan) {
+                        result = obj;
+                    } else if (answer instanceof GreaterThan) {
                         obj = src;
                         result = src;
-                    }
-                    else if (CaseBase.GREATER_THAN.equalsIgnoreCase(answer.toString())) {
-                        result = obj;
-                    }
-                    else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
+                        System.out.println("Greater");
+                    } else if (answer instanceof Equal) {
+                        System.out.println("Equal");
                         if (src.getRank() > obj.getRank()) {
                             result = src;
                             obj = src;
-                        }
-                        else { 
+                        } else { 
                             if (src.getTime() < obj.getTime()) {
                                 result = src;
                                 obj = src;
-                            }
-                            else {
+                            } else {
                                 result = obj;
                             }
                         }
                     }
-
                 }
             }
 

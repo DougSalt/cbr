@@ -5,13 +5,15 @@ then create a directory `cbr`,  in the extensions folder within your
 installation of NetLogo, and copy `test/cbr/cbr.jar` to this directory. For
 typical NetLogo installations:
 
-	+ On Mac OS X: `/Applications/NetLogo 6.1.0/extensions`
+	+ On Mac OS X: `/Applications/NetLogo N.n.n/extensions`
 	+ On 64-bit Windows with 64-bit NetLogo or 32-bit Windows with 32-bit
-      NetLogo: `C:\Program Files\NetLogo 6.1.0\app\extensions`
+      NetLogo: `C:\Program Files\NetLogo N.n.n\app\extensions`
 	+ On 64-bit Windows with 32-bit NetLogo: `C:\Program Files (x86)\NetLogo
-      6.1.0\app\extensions`
+      N.n.n\app\extensions`
 	+ On Linux: the `app/extensions` subdirectory of the NetLogo directory
       extracted from the installation `.tgz`
+
+      where N.n.n is the version of Netlogo
 
 3. This subfolder (relative to your home directory):
 
@@ -20,4 +22,4 @@ typical NetLogo installations:
     + On Linux: `.netlogo`
 
 4. The `.bundled` subfolder of the extensions folder mentioned in Item 2 (for
-example, `/Applications/NetLogo 6.1.0/extensions/.bundled` on Mac OS X).
+example, `/Applications/NetLogo N.n.n/extensions/.bundled` on Mac OS X).

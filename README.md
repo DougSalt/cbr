@@ -51,7 +51,7 @@ To clean, then `bin/clean.sh`
 I have abandoned the usual conventions of of Java packaging, as NetLogo does
 not tend to work that way, being Scala based.
 
-## Contents of repository
+# MANIFEST
 
 + bin - directory where all the scripts and compiled classes are stored. Be
   careful some IDEs automatically clear this directory on a clean - there are
@@ -79,12 +79,6 @@ not tend to work that way, being Scala based.
   install the plugin.
 + TODO - list of outstanding tasks to complete on the plugin.
 
-# CONTACTS
-
-doug[dot]salt[at]hutton[dot]ac[dot]uk
-
-
-
 # INSTRUCTIONS
 
 <!-- Cut below this line and add into the Notes section of the demo Netlogo model, cbr.nlogo -->
@@ -94,6 +88,8 @@ doug[dot]salt[at]hutton[dot]ac[dot]uk
 This is an example of how to use the case based reasoning plugin.
 
 ## HOW IT WORKS
+
+The code implements a reference version of code using the extension that is described here.
 
 Select the run-testing button to make sure that the code is behaving as it should. If there is no error dialogue then the code is working as expected. The code also shows how to the use the extension.
 

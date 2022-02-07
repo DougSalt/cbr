@@ -4,6 +4,41 @@ to run-tests
 
   output-print "cbr: Runing tests..."
   let case-base cbr:new
+
+  test cbr:gt "greater than" "gt"
+  test cbr:lt "less than" "lt"
+  test cbr:eq "equal" "eq"
+  test cbr:incmp "incomparable" "incmp"
+
+  output-print "Testing string comparator..."
+
+  let string-a "aaaaaa"
+  let string-b "bbbbbb"
+  let string-c "aaaacc"
+  let string-d "dddddd"
+
+  let a cbr:add case-base string-a "install" true
+  let b cbr:add case-base string-b"install" true
+  let c cbr:add case-base string-c "install" true
+  let d cbr:add case-base string-d "install" true
+
+  test cbr:eq? case-base b b b  true "eq? STRING true"
+  test cbr:eq? case-base c b b false "eq? STRING false"
+  test cbr:lt? case-base b a c true "lt? STRING true"
+  test cbr:lt? case-base a b c false "lt? STRING false"
+  test cbr:gt? case-base a b c true "gt? STRING true"
+  test cbr:gt? case-base b a c false "gt? STRING false"
+  test cbr:incmp? case-base a b d true "incmp? STRING true"
+  test cbr:incmp? case-base b a c false "incmp? STRING false"
+
+  test cbr:state case-base cbr:match case-base "dd" "install" string-d "match STRING"
+  let d2 cbr:add case-base "ddd" "install" true
+  test length cbr:matches case-base "dd" "install" 2 "matches STRING"
+
+  output-print "Testing list comparator..."
+
+  set case-base cbr:new
+
   let some-state-1 ["state-1" "state-2" "state-3"]
   let some-state-2 ["state-1" "state-4" "state-5"]
   let some-state-3 ["state-1" "state-2" "state-6"]
@@ -21,12 +56,7 @@ to run-tests
   let decisions (list some-decision-1 some-decision-2 some-decision-3 some-decision-4 )
   let outcomes (list some-outcome-1 some-outcome-2 some-outcome-3 some-outcome-4 )
   reset-ticks
-  ; Constants
 
-  test cbr:gt "greater than" "cbr:gt"
-  test cbr:lt "less than" "cbr:lt"
-  test cbr:eq "equal" "cbr:eq"
-  test cbr:incmp "incomparable" "cbr:incmp"
 
   tick
   let some-case-1 cbr:add case-base some-state-1 some-decision-1 some-outcome-1
@@ -39,28 +69,20 @@ to run-tests
 
   let some-invalid-case cbr:add case-base ["state-1" "state-2"] some-decision-3 some-outcome-3
 
-  test cbr:state case-base some-case-1 some-state-1 "cbr:state"
-  test cbr:outcome case-base some-case-1 some-outcome-1 "cbr:outcome"
-  test cbr:decision case-base some-case-1 some-decision-1 "cbr:decision"
-  test cbr:get-time case-base some-case-1 "1.0" "cbr:get-time"
+  test cbr:state case-base some-case-1 some-state-1 "state LIST"
+  test cbr:outcome case-base some-case-1 some-outcome-1 "outcome LIST"
+  test cbr:decision case-base some-case-1 some-decision-1 "decision LIST"
+  test cbr:get-time case-base some-case-1 "1.0" "get-time LIST"
 
-  ; Lambda
 
-  ;cbr:lambda case-base comparator
-  test comparator case-base some-case-1 some-invalid-case some-case-3 cbr:incmp "cbr:incmp, i.e. just plain wrong"
-  test comparator case-base some-case-1 some-case-1 some-case-3 cbr:eq "cbr:eq, i.e. equally distant"
-  test comparator case-base some-case-1 some-case-2 some-case-3 cbr:lt "cbr:lt, i.e. closer distance"
-  test comparator case-base some-case-2 some-case-1 some-case-3 cbr:gt "cbr:gt, i.e. further distant"
-
-  test cbr:lt? case-base some-case-1 some-case-2 some-case-3 true "cbr:lt?"
-  test cbr:lt? case-base some-case-2 some-case-1 some-case-3 false "cbr:lt?"
-  test cbr:gt? case-base some-case-2 some-case-1 some-case-3 true "cbr:gt?"
-  test cbr:gt? case-base some-case-1 some-case-2 some-case-3 false "cbr:gt?"
-  test cbr:eq? case-base some-case-1 some-case-4 some-case-3 true "cbr:eq?"
-  test cbr:eq? case-base some-case-1 some-case-2 some-case-3 false "cbr:eq?"
-
-  test cbr:incmp? case-base some-case-1 some-case-2 some-case-3 false "cbr:incmp?"
-  test cbr:incmp? case-base some-case-1 some-case-2 some-invalid-case true "cbr:incmp?"
+  test cbr:eq? case-base some-case-1 some-case-1 some-case-1 true "eq? LIST true"
+  test cbr:eq? case-base some-case-1 some-case-2 some-case-1 false "eq? LIST false"
+  test cbr:lt? case-base some-case-1 some-case-2 some-case-3 false "lt? LIST false"
+  test cbr:lt? case-base some-case-2 some-case-1 some-case-3 true "lt? LIST ture"
+  test cbr:gt? case-base some-case-2 some-case-1 some-case-3 false "gt? LIST false"
+  test cbr:gt? case-base some-case-1 some-case-2 some-case-3 true "gt? LIST true"
+  test cbr:incmp? case-base some-case-1 some-case-2 some-case-3 false "incmp? LIST false"
+  test cbr:incmp? case-base some-case-1 some-case-2 some-invalid-case false "incmp? LIST true"
 
   ; Remove the dodgy case
 
@@ -68,32 +90,33 @@ to run-tests
 
   ; Doing a single match
 
-  let my-match cbr:match case-base (list "state-1" "state-2" "state-3") "install"
+  let my-match cbr:match case-base (list "state-1" "state-2" "state-6") "install"
 
-  test cbr:outcome case-base my-match some-outcome-1 "cbr:match cbr:outcome"
-  test cbr:state case-base my-match some-state-1 "cbr:match cbr:state"
-  test cbr:decision case-base my-match some-decision-1 "cbr:match cbr:decision"
+  show my-match
+  test cbr:outcome case-base my-match some-outcome-3 "cbr:match cbr:outcome"
+  test cbr:state case-base my-match some-state-3 "cbr:match cbr:state"
+  test cbr:decision case-base my-match some-decision-3 "cbr:match cbr:decision"
 
   ; Ranking
 
   cbr:set-rank case-base some-case-4 99
-  test cbr:get-rank case-base some-case-4 "99.0" "cbr-set-rank"
+  test cbr:get-rank case-base some-case-4 "99.0" "set-rank"
 
   ; Doing multiple matches
 
   let my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  test length my-matches 1 "cbr:matches"
+  test length my-matches 1 "matches"
 
   cbr:set-rank case-base some-case-4 0
-  test cbr:get-rank case-base some-case-4 "0.0" "cbr-set-rank"
+  test cbr:get-rank case-base some-case-4 "0.0" "set-rank"
 
   set my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  test length my-matches 2 "cbr:matches"
+  test length my-matches 2 "matches"
 
   ; Setting Time
 
   cbr:set-time case-base some-case-1 200
-  test cbr:get-time case-base some-case-1 "200.0" "cbr:time"
+  test cbr:get-time case-base some-case-1 "200.0" "time"
 
   ; Listing
 
@@ -107,119 +130,53 @@ to run-tests
 
   cbr:set-max-size case-base 3
 
-  test length cbr:all case-base 4 "cbr:all should return 4"
+  test length cbr:all case-base 4 "all should return 4"
 
   cbr:resize case-base
-  test length cbr:all case-base 3 "cbr:all should return 3 after cbr:resize"
+  test length cbr:all case-base 3 "all should return 3 after cbr:resize"
 
   ; Forgetting
 
   cbr:set-earliest case-base 3
-  test cbr:get-earliest case-base 3 "cbr:set-earliest and cbr-get-earliest"
+  test cbr:get-earliest case-base 3 " cbr:set-earliest and cbr-get-earliest"
 
-  test length cbr:all case-base 3 "cbr:all should return 3"
+  test length cbr:all case-base 3 "all should return 3"
   cbr:forget case-base
-  test length cbr:all case-base 2 "cbr:all should return 2"
+  test length cbr:all case-base 2 "all should return 2"
+
+  output-print "Testing list comparator..."
+
+  set case-base cbr:new
+
+  let double-a 1.0
+  let double-b 2.55
+  let double-c pi
+  let double-d e
+
+  set a cbr:add case-base double-a "install" true
+  set b cbr:add case-base double-b"install" true
+  set c cbr:add case-base double-c "install" true
+  set d cbr:add case-base double-d "install" true
+
+  test cbr:eq? case-base b b b  true "eq? STRING true"
+  test cbr:eq? case-base c b b false "eq? STRING false"
+  test cbr:lt? case-base b a c true "lt? STRING true"
+  test cbr:lt? case-base a b c false "lt? STRING false"
+  test cbr:gt? case-base a b c true "gt? STRING true"
+  test cbr:gt? case-base b a c false "gt? STRING false"
+  test cbr:incmp? case-base a b d true "incmp? STRING true"
+  test cbr:incmp? case-base b a c false "incmp? STRING false"
+
+  test cbr:state case-base cbr:match case-base "dd" "install" double-d "match STRING"
+  set d2 cbr:add case-base pi "install" true
+  test length cbr:matches case-base "dd" "install" 2 "matches STRING"
 
   output-print "cbr: ...ending tests."
+  stop
 
 
-;  ; Tables
-;
-;  let some-state-5 table:from-list [["1st key" "1st Value"] ["2nd Key" "2nd Value"] ["3rd Key" "3rd Value"]]
-;  let some-decision-5 "repair"
-;  let some-outcome-5 true
-;  let some-case-5 cbr:add case-base some-state-5 some-outcome-5 some-decision-5
-;
-;
-;  output-print (word "Added case 5 gives length = " length cbr:all case-base)
-;  output-print (word "testing cbr:decision " cbr:decision case-base some-case-5)
-;  output-print (word "testing cbr:state " cbr:state case-base some-case-5)
-;  output-print (word "testing cbr:outcome " cbr:outcome case-base some-case-5)
-;  output-print (word "testing cbr:time " cbr:get-time case-base some-case-5)
-;
-;  output-print (word "case base = " case-base)
-;
-;  ; The vat-grown beef: what we are really here for
-;
-;  output-print (word "The length before the match is  = " length cbr:all case-base)
-;  let result cbr:match case-base some-state-3 some-decision-3
-;  output-print (word "Dum, dum, da - the result is " result)
-;
-;  let some-state-6 ["state-1" "state-2" "state-3"]
-;  let some-state-7 ["state-1" "state-2" "state-3"]
-;  let some-state-8 ["state-1" "state-2" "state-6"]
-;  let some-state-9 ["state-1" "state-2" "state-3"]
-;  let some-outcome-6 ["install-6"]
-;  let some-outcome-7 ["install-7"]
-;  let some-outcome-8 ["install-8"]
-;  let some-outcome-9 ["install-9"]
-;  let some-decision-6 [true true true]
-;  let some-decision-7 [true true false]
-;  let some-decision-8 [true false true]
-;  let some-decision-9 [true false false]
-;
-;  let other-case-base cbr:new
-;  let some-case-6 cbr:add other-case-base some-state-6 some-outcome-6 some-decision-6
-;  let some-case-7 cbr:add other-case-base some-state-7 some-outcome-7 some-decision-7
-;  let some-case-8 cbr:add other-case-base some-state-8 some-outcome-8 some-decision-8
-;  let some-case-9 cbr:add other-case-base some-state-9 some-outcome-9 some-decision-9
-;
-;  output-print (word "Before combining then the original case-base had " length cbr:all case-base " cases.")
-;  cbr:combine case-base other-case-base
-;  output-print (word "After combining then the original case-base has " length cbr:all case-base " cases.")
-;
-;  ; This should return 3 matches
-;  let results cbr:matches case-base some-state-7 "armpits"
-;  foreach results [ i ->
-;    output-print (word "A match might be " i)
-;  ]
 end
 
-to-report comparator [some-case-base yes-case no-case reference-case]
-  let yes-state cbr:state some-case-base yes-case
-  let no-state cbr:state some-case-base no-case
-  let reference-state cbr:state some-case-base reference-case
-
-  if (cbr:decision some-case-base yes-case != cbr:decision some-case-base no-case and
-    cbr:decision some-case-base yes-case != cbr:decision some-case-base reference-case) [
-    report cbr:incmp
-  ]
-  if not is-list? yes-state or not is-list? no-state or not is-list? reference-state [
-    report cbr:incmp
-  ]
-  if length yes-state != length no-state  [
-    report cbr:incmp
-  ]
-  if length no-state != length reference-state [
-    report cbr:incmp
-  ]
-  if (item 0 yes-state = item 0 no-state and
-      item 1 yes-state = item 1 no-state and
-      item 2 yes-state = item 2 no-state) [
-    report cbr:eq
-  ]
-
-  let comparison-1-and-3 0
-  foreach n-values (length yes-state) [i -> i] [ i ->
-    if item i yes-state = item i reference-state [
-      set comparison-1-and-3 comparison-1-and-3 + 1
-    ]
-  ]
-  let comparison-2-and-3 0
-  foreach n-values (length no-state) [i -> i] [ i ->
-    if item i no-state = item i reference-state [
-      set comparison-2-and-3 comparison-2-and-3 + 1
-    ]
-  ]
-  if comparison-1-and-3 = 0 and comparison-2-and-3 = 0 [
-    report cbr:incmp
-  ]
-  if comparison-1-and-3 > comparison-2-and-3 [
-    report cbr:lt
-  ]
-  report cbr:gt
-end
 
 to test [actual-value expected-value message]
   if actual-value != expected-value [
@@ -1080,7 +1037,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.0
+NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

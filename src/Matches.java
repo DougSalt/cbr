@@ -38,23 +38,27 @@ public class Matches implements Reporter
                 result = result.lput(obj);
                 for (int i = 1; i < cases.length; i++) {
                     Case src = (Case)cases[i];
-                    Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
-                    Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-                    System.err.println("pickle " + result);
+                    Object answer = null;
+                    if ( caseBase.getCaseLambda() == null ) {
+                        answer = caseBase.defaultLambda(src, obj, ref);
+                    } else {
+                        Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
+                        answer = caseBase.getCaseLambda().report(context, lambdaArgs);
+                    }
                     if (src.getOutcome() == Nobody$.MODULE$) {
                         continue;
                     }
-                    else if (CaseBase.INCOMPARABLE.equalsIgnoreCase(answer.toString())) {
+                    else if (answer instanceof Incomparable) {
                         continue;
                     }
-                    else if (CaseBase.LESS_THAN.equalsIgnoreCase(answer.toString())) {
+                    else if (answer instanceof LessThan) {
+                        result = LogoList.Empty().lput(obj);
+                    }
+                    else if (answer instanceof GreaterThan) {
                         obj = src;
                         result = LogoList.Empty().lput(src);
                     }
-                    else if (CaseBase.GREATER_THAN.equalsIgnoreCase(answer.toString())) {
-                        continue;
-                    }
-                    else if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
+                    else if (answer instanceof Equal) {
                         if (src.getRank() > obj.getRank()) {
                             result = LogoList.Empty().lput(src);
                             obj = src;

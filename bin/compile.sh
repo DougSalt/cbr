@@ -18,7 +18,7 @@
 
 #JAVAC=javac
 JAVAC=/usr/lib/jvm/java-8-openjdk/bin/javac
-CLASS_PATH=lib/netlogo-6.1.0.jar:bin:lib/scala-library.jar
+CLASS_PATH=lib/netlogo-6.1.0.jar:bin:lib/scala-library-2.12.4.jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
     JAVAC='/cygdrive/c/Java/jdk-17.0.1/bin/javac'
@@ -43,8 +43,6 @@ bin/clean.sh 2>/dev/null
     src/CBRExtension.java \
     src/CaseLambda.java \
     src/Decision.java \
-    src/DefaultComparator.java \
-    src/DefaultComparatorInterface.java \
     src/Equal.java \
     src/EqualBoolean.java \
     src/Forget.java \

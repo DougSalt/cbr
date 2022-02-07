@@ -16,7 +16,6 @@ fi
 	CBRExtension.class \
 	CombineCaseBases.class \
 	Decision.class \
-	DefaultComparator.class \
 	Equal.class \
 	EqualBoolean.class \
 	Forget.class \

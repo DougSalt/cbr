@@ -18,8 +18,13 @@ public class EqualBoolean implements Reporter
 			NetLogoCase ref = (NetLogoCase)args[3].get();
 
             Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
-            Object answer = caseBase.getCaseLambda().report(context, lambdaArgs);
-            if (CaseBase.EQUAL.equalsIgnoreCase(answer.toString())) {
+            Object answer = null;
+            if (caseBase.getCaseLambda() == null) {
+                answer = caseBase.defaultLambda(src, obj, ref);
+            } else {
+                answer = caseBase.getCaseLambda().report(context, lambdaArgs);
+            }
+            if (answer instanceof Equal) {
                 return true;
             }
             return false;

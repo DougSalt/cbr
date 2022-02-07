@@ -28,6 +28,7 @@ import java.time.*;
 import org.nlogo.core.*;
 import org.nlogo.api.Reporter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.LinkedList;
 
 /**
  * <!-- CaseBase -->
- * 
+ *
  * A collection of cases.
  *
  * @author Gary Polhill
@@ -49,7 +50,7 @@ public class CaseBase implements Collection<Case> {
 
 	private Double tickInfimum = -1.0;
 
-	private DefaultComparatorInterface caseLambda = DefaultComparator::report;
+	private AnonymousReporter caseLambda = null;
 
     public static final String LESS_THAN = "less than";
     public static final String GREATER_THAN = "greater than";
@@ -70,14 +71,6 @@ public class CaseBase implements Collection<Case> {
 	public CaseBase() {
 		base = new ArrayList<Case>();
 	}
-
-//	public int addCase(Case c) {
-//		if (!((base.size() + 1) == maxSize) && !base.add(c))
-//		{
-//			throw new RuntimeException("Failed to add case " + c + " to case base");
-//		}
-//		return base.size() - 1;
-//	}
 
     public void addCase(Case c) {
 		base.ensureCapacity(base.size() + 1);
@@ -102,18 +95,6 @@ public class CaseBase implements Collection<Case> {
 		return base.get(i);
 	}
 
-//	public Collection<Case> matches(Feature<?>.Value... values) {
-//		LinkedList<Case> list = new LinkedList<Case>();
-//
-//		for(Case c : base) {
-//			if(c.matches(values)) {
-//				list.add(c);
-//			}
-//		}
-//
-//		return list;
-//	}
-
 	public Collection<Case> forActivity(Object activity) {
 		LinkedList<Case> list = new LinkedList<Case>();
 
@@ -125,18 +106,6 @@ public class CaseBase implements Collection<Case> {
 
 		return list;
 	}
-
-//	public Collection<Case> outcomeMatches(Feature<?>.Value... values) {
-//		LinkedList<Case> list = new LinkedList<Case>();
-//
-//		for(Case c : base) {
-//			if(c.outcomeMatches(values)) {
-//				list.add(c);
-//			}
-//		}
-//
-//		return list;
-//	}
 
 	public void imposeSizeLimit(int size) {
 		while(base.size() > size) {
@@ -261,21 +230,6 @@ public class CaseBase implements Collection<Case> {
 		return buf.toString();
 	}
 
-//	public static CaseBase parseString(String cbstr) throws ClassNotFoundException, IOException, CaseBaseException {
-//		if(cbstr.startsWith("[") && cbstr.endsWith("]")) {
-//			CaseBase cb = new CaseBase();
-//			cbstr = cbstr.substring(1, cbstr.length() - 1);
-//			String[] cases = cbstr.split("; ");
-//			for(String case_str: cases) {
-//				cb.add(Case.parseString(case_str));
-//			}
-//			return cb;
-//		}
-//		else {
-//			throw new CaseBaseException("Invalid case base string: \"" + cbstr + "\" -- must start with \"[\" and end with \"]\"");
-//		}
-//	}
-
 	public int getMaxSize()
 	{
 		return maxSize;
@@ -317,11 +271,11 @@ public class CaseBase implements Collection<Case> {
         Case obj = (Case) args[2].get();
         Case ref = (Case) args[3].get();
         Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
-		Object result = caseLambda.report(context,convertedArgs);
+		Object result = caseLambda.report(context, convertedArgs);
 		return EQUAL.equalsIgnoreCase(result.toString());
 	}
 
-	public boolean isCloser(Argument[] args, Context context) 
+	public boolean isCloser(Argument[] args, Context context)
 		throws ExtensionException
 	{
         CaseBase cbr = (CaseBase) args[0].get();
@@ -344,6 +298,18 @@ public class CaseBase implements Collection<Case> {
 		Object result = caseLambda.report(context,convertedArgs);
 		return !GREATER_THAN.equalsIgnoreCase(result.toString());
 	}
+    public static Set convertToSet(String string) {
+
+      // Result hashset
+      Set resultSet = new HashSet();
+
+      for (int i = 0; i < string.length(); i++) {
+          resultSet.add(new Character(string.charAt(i)));
+      }
+
+      // Return result
+      return resultSet;
+    }
 	public Object defaultLambda(Object src, Object obj, Object ref)
 		throws ExtensionException
 	{
@@ -362,8 +328,8 @@ public class CaseBase implements Collection<Case> {
         } else {
             b = obj;
         }
-        
-        if (a.getClass() !=  b.getClass()) 
+
+        if (a.getClass() !=  b.getClass())
             return new Incomparable();
 
         Object r;
@@ -372,8 +338,8 @@ public class CaseBase implements Collection<Case> {
         } else {
             r = ref;
         }
-         
-        if (a.getClass() !=  r.getClass()) 
+
+        if (a.getClass() !=  r.getClass())
             return new Incomparable();
         if (a instanceof Double) {
             Double rMinusA = (Double) r - (Double) a;
@@ -387,31 +353,41 @@ public class CaseBase implements Collection<Case> {
             }
         } else if (a instanceof LogoList) {
 
-            LogoList aList = (LogoList) a;
-            LogoList bList = (LogoList) b;
-            LogoList rList = (LogoList) r;
+            List aList = ((LogoList) a).toJava();
+            List bList = ((LogoList) b).toJava();
+            List rList = ((LogoList) r).toJava();
+            System.out.println("==============");
+            System.out.println("aSet  " + aList);
+            System.out.println("bSet  " + bList);
+            System.out.println("rSet  " + rList);
 
-            LogoList anrList = (LogoList) aList.intersect(rList);
-            if (anrList.isEmpty())
+            Set anrList = (Set) aList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+            System.out.println("anrSet  " + anrList);
+            Set bnrList = (Set) bList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+            System.out.println("bnrSet  " + bnrList);
+
+            if (anrList.isEmpty() && bnrList.isEmpty())
                 return new Incomparable();
 
-            LogoList bnrList = (LogoList) bList.intersect(rList);
-            if (bnrList.isEmpty())
-                return new Incomparable();
-
-            LogoList anbnrList = (LogoList) anrList.intersect(bnrList);
-            if (anbnrList.isEmpty())
-                return new Incomparable();
-
-            if ( anrList.length() > bnrList.length() )
+            System.out.println("Greater than test");
+            if (anrList.size() > bnrList.size())
                 return new GreaterThan();
 
-            if ( anrList.length() < bnrList.length() )
+            System.out.println("Less than test");
+            if (anrList.size() < bnrList.size())
                 return new LessThan();
 
-            if ( anrList != bnrList )
+            System.out.println("Equality test");
+            if (! anrList.equals(bnrList))
                 return new LessThan();
 
+            System.out.println("Equal");
             return new Equal();
 
          } else if (a instanceof ArrayAgentSet) {
@@ -420,7 +396,7 @@ public class CaseBase implements Collection<Case> {
              LogoList bList = ((ArrayAgentSet) b).toLogoList();
              LogoList rList = ((ArrayAgentSet) r).toLogoList();
 
-            LogoList anrList = (LogoList) aList.intersect(rList);
+            LogoList  anrList = (LogoList) aList.intersect(rList);
             if (anrList.isEmpty())
                 return new Incomparable();
 
@@ -438,7 +414,7 @@ public class CaseBase implements Collection<Case> {
             if ( anrList.length() < bnrList.length() )
                 return new LessThan();
 
-            if ( anrList != bnrList )
+            if ( ! anrList.equals(bnrList) )
                 return new LessThan();
 
             return new Equal();
@@ -451,19 +427,11 @@ public class CaseBase implements Collection<Case> {
 
             Set anrSet = new HashSet(aSet);
             anrSet.retainAll(rSet);
-            if (anrSet.isEmpty())
-                return new Incomparable();
 
             Set bnrSet = new HashSet(bSet);
             bnrSet.retainAll(rSet);
-            if (bnrSet.isEmpty())
+            if (anrSet.isEmpty() && bnrSet.isEmpty())
                 return new Incomparable();
-
-            Set anbnrSet = new HashSet(anrSet);
-            anbnrSet.retainAll(bnrSet);
-            if (anbnrSet.isEmpty())
-                return new Incomparable();
-
 
             if ( anrSet.size() > bnrSet.size() )
                 return new GreaterThan();
@@ -471,23 +439,13 @@ public class CaseBase implements Collection<Case> {
             if ( anrSet.size() < bnrSet.size() )
                 return new LessThan();
 
-            if ( anrSet != bnrSet)
+            if (! anrSet.equals(bnrSet))
                 return new LessThan();
 
             return new Equal();
         }
+
         return result;
-    }
-    public static Set convertToSet(String string) {
 
-      // Result hashset
-      Set resultSet = new HashSet();
-
-      for (int i = 0; i < string.length(); i++) {
-          resultSet.add(new Character(string.charAt(i)));
-      }
-
-      // Return result
-      return resultSet;
-  }
+	}
 }
