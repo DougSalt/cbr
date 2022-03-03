@@ -46,9 +46,7 @@ public class Match implements Reporter
                     } else if (answer instanceof GreaterThan) {
                         obj = src;
                         result = src;
-                        System.out.println("Greater");
                     } else if (answer instanceof Equal) {
-                        System.out.println("Equal");
                         if (src.getRank() > obj.getRank()) {
                             result = src;
                             obj = src;

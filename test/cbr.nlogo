@@ -1,5 +1,10 @@
 extensions [ cbr table ]
 
+breed [ agents-a agent-a ]
+breed [ agents-b agent-b ]
+;breed [ agents-c agent-c ]
+breed [ agents-d agent-d ]
+
 to run-tests
 
   output-print "cbr: Runing tests..."
@@ -144,7 +149,7 @@ to run-tests
   cbr:forget case-base
   test length cbr:all case-base 2 "all should return 2"
 
-  output-print "Testing list comparator..."
+  output-print "Testing numeric comparator..."
 
   set case-base cbr:new
 
@@ -158,18 +163,51 @@ to run-tests
   set c cbr:add case-base double-c "install" true
   set d cbr:add case-base double-d "install" true
 
-  test cbr:eq? case-base b b b  true "eq? STRING true"
-  test cbr:eq? case-base c b b false "eq? STRING false"
-  test cbr:lt? case-base b a c true "lt? STRING true"
-  test cbr:lt? case-base a b c false "lt? STRING false"
-  test cbr:gt? case-base a b c true "gt? STRING true"
-  test cbr:gt? case-base b a c false "gt? STRING false"
-  test cbr:incmp? case-base a b d true "incmp? STRING true"
-  test cbr:incmp? case-base b a c false "incmp? STRING false"
+  test cbr:eq? case-base b b b  true "eq? DOUBLE true"
+  test cbr:eq? case-base c b b false "eq? DOUBLE false"
+  test cbr:lt? case-base a b c true "lt? DOUBLE true"
+  test cbr:lt? case-base b a c false "lt? DOUBLE false"
+  test cbr:gt? case-base b a c true "gt? DOUBLE true"
+  test cbr:gt? case-base a b c false "gt? DOUBLE false"
+  test cbr:incmp? case-base a b d false "incmp? DOUBLE false"
+  set d2 cbr:add case-base "string" "install" true
+  test cbr:incmp? case-base b a d2 true "incmp? DOUBLE true"
+  cbr:remove case-base d2
 
-  test cbr:state case-base cbr:match case-base "dd" "install" double-d "match STRING"
+  test cbr:state case-base cbr:match case-base pi "install" double-c "match DOUBLE"
   set d2 cbr:add case-base pi "install" true
-  test length cbr:matches case-base "dd" "install" 2 "matches STRING"
+  test length cbr:matches case-base pi "install" 2 "matches DOUBLE"
+
+  output-print "Testing agent comparator..."
+
+  set case-base cbr:new
+
+  clear-turtles
+  create-agents-a 2 [ set color grey ]
+  create-agents-b 3 [ set color grey ]
+  let agents-c (turtle-set agents-a agents-b)
+  create-agents-d 2 [ set color grey ]
+
+  set a cbr:add case-base agents-a "install" true
+  set b cbr:add case-base agents-b"install" true
+  set c cbr:add case-base agents-c "install" true
+  set d cbr:add case-base agents-d "install" true
+
+  test cbr:eq? case-base b b b true "eq? AGENT true"
+  test cbr:eq? case-base a b b false "eq? AGENT false"
+  test cbr:lt? case-base b a c false "lt? AGENT false"
+  test cbr:lt? case-base a b c true "lt? AGENT true"
+  test cbr:gt? case-base a b c false "gt? AGENT false"
+  test cbr:gt? case-base b a c true "gt? AGENT true"
+  test cbr:incmp? case-base a a a false "incmp? AGENT false"
+  let invalid cbr:add case-base "string" "install" true
+  test cbr:incmp? case-base b a invalid true "incmp? AGENT true"
+  cbr:remove case-base invalid
+
+  test cbr:state case-base (cbr:match case-base agents-d "install") agents-d "match AGENT"
+  let d1 cbr:add case-base agents-d "install-d1" true
+  set d2 cbr:add case-base agents-d "install-d2" true
+  test length (cbr:matches case-base agents-d "install") 3 "matches AGENT"
 
   output-print "cbr: ...ending tests."
   stop
@@ -265,6 +303,8 @@ This is an example of how to use the case based reasoning plugin.
 
 ## HOW IT WORKS
 
+The code implements a reference version of code using the extension that is described here.
+
 Select the run-testing button to make sure that the code is behaving as it should. If there is no error dialogue then the code is working as expected. The code also shows how to the use the extension.
 
 Normally a  case base consists of a series of cases, each of these cases consist of
@@ -279,20 +319,53 @@ A state and decision/activity are presented to the case base. The case base is s
 
 A NetLogo case consists of a state in any of the standard Netlogo variables, such as list, number, string, etc. This is strictly defined by the `cbr:lambda` which is the comparator program used to determine the "distance" the three cases:
 
-+ yes-case
-+ no-case
-+ reference-case
++ case A
++ case B
++ referent case R
 
 are relative to ecah other. That is, if: 
 
-+ the yes-case is 'closer' to the reference-case than the no-case using `cbr:lamda`  to the reference-case then `cbr:lt` is returned
-+ the no-case is 'closer' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:gt` is returned
-+ the no-case is 'same distance' to the reference-case than the yes-case using `cbr:lamda`  to the reference-case then `cbr:eq` is returned
-+ the no-case is 'closer' using `cbr:lamda`  to the reference-case then `cbr:lt` is returned
++ the case A is 'closer' to the referent case R than the case B using `cbr:lamda`  to the referent case R then `cbr:lt` is returned
++ the case B is 'closer' to the referent case R than the case A using `cbr:lamda`  to the referent case R then `cbr:gt` is returned
++ the case B is 'same distance' to the referent case R than the case A using `cbr:lamda`  to the referent case R then `cbr:eq` is returned
++ the case B is 'closer' using `cbr:lamda`  to the referent case R then `cbr:lt` is returned
 
-The `cbr:lamda` is then used by `cbr:match` to determine a single closest match of a "hypothetical" case that is presented to `cbr:match` which consists of a state and decison and returning the 'best match' base on the repeated use of `cbr:lamda` to determine which is the closest match. If the match does not meet a suitabl criterion then 
+The `cbr:lamda` is then used by `cbr:match` or `cbr:matches` to determine a single closest match of a "hypothetical" case that is presented to `cbr:match` or more or one equally close matches if `cbr:matches` is used. The case will consists of a state and decison and returning the 'best match' base on the repeated use of `cbr:lamda` to determine which is the closest match. If the match does not meet a suitable criterion then `cbr:incmp` is returned.
 
-If there are more than one match then the case with the highest rank is returned, or failing that the oldest.  If both these conditions are equal then the result is a random selection from among those cases.
+When using `cbr:match`, then if there are more than one match then the case with the highest rank is returned, or failing that the oldest.  If both these conditions are equal then the result is a random selection from among those cases. More than one case may be returned if `cbr:matches` is used.
+
+If no `cbr:lamba` is provided then a default lambda is used. The specification for this is as follows.
+
+By default, the comparison algorithm has three arguments:
+
++ Case A
++ Case B
++ Referent case R
+
+Cases A and B need not be in a case base; they may also have empty Decision and Outcome parts, or simply be a State. Case R may have empty Decision and Outcome parts, or simply be a State. (In a typical use-case, R is an ‘expected state of the world’ for which the deciding agent is trying to find a range of cases.)
+
+The algorithm returns one of four responses:
+
++ `cbr:gt` – iff A more similar to R than B
++ `cbr:lt` – iff B more similar to R than B
++ `cbr:eq` – iff A and B are equally similar to R
++ `cbr:incmp` – iff A and B are not comparably similar to R
+
+The algorithm should do the following:
+
+1. If R is a case, then set R to the State part of the case
+2. If A is a case, then set A to the State part of the case
+3. If B is a case, then set B to the State part of the case
+4. We now consider different datatypes for R, A and B in S = { number } and M = { string, patch, turtle, link, list, agent set } a N. B. S is a set of scalar datatypes; M is a set of multidimensional datatypes
+5. If R, A and B are not the same datatype, return `cbr:incmp`
+6. If R, A and B are all numbers, then if abs (R – A) &lt; abs(R – B) return `cbr:gt`; else if abs (R – A) &gt; abs(R – B) return `cbr:lt`; else return `cbr:eq`
+7. If R, A and B are all agent sets, then let Am = A – (A intersect B) and let Bm = B – (A intersect B). If Am and Bm are both empty, return `cbr:eq`.  Let AmR = Am – (Am intersect R); Let BmR = Bm – (Bm intersect R); Let AR = A intersect R; Let BR = B intersect R. If AR is a superset of BR and AmR is a subset of BmR, return `cbr:gt`; Else if BR is a superset of AR and BmR is a subset of AmR, return `cbr:lt`; Else return `cbr:incmp`
+   **Basic principle:** A is more similar to R than B is if all agents that B has in common with R, A also has in common with R, and all agents that A does not have in common with R, B also does not have in common with R. If there are members of R that are members of A but not B, and there are also members of R that are members of B but not A, then A and B are incomparably similar to R; likewise, if we look at members of A and B that are not members of R, unless one is a subset-of-or-equal-to the other, A and B are incomparably similar. The diagram below shows the three conditions in which the agent set comparisons are not incomparable. Note that in the left one, if B – (A intersect B) is empty, A is still more similar than B to R; also, if A – (A intersect B) is empty, A is still more similar to R. If both those regions are empty, then A and B are equal. The corresponding points are true of the middle diagram (i.e. with A and B swapped).
+  ![Intersection diagrams for the default comparator](../doc/default-comparator.png)
+8. If A, B and R are all lists, then let answer = `cbr:eq`. For i in 1:min(length of A, length of B, length of R): if A[i] == R[i] and B[i] != R[i], then if answer == `cbr:lt`, return `cbr:incmp`; else let answer = `cbr:gt`. Else if B[i] == R[i] and A[i] != R[i], then if answer == `cbr:gt`, return `cbr:incmp`; else let answer = `cbr:lt`. End For. If answer == `cbr:gt` and A has the shortest length and and For all j in (i + 1):min(length of B, length of R), B[j] != R[j], then return `cbr:gt`. If answer == `cbr:lt` and B has the shortest length and For all j in (i + 1):min(length of A, length of R), A[j] != R[j], then return `cbr:lt`. If A and B have different lengths, return `cbr:incmp`. If For all j in (i + 1):(length of A), A[j] == B[j], then return `cbr:eq`ual else return `cbr:incmp`
+  **Basic principle:** A is more similar-to R than B if everywhere that B is equal to R, A is also equal to R
+9. If A, B and R all being strings can work on the same basis as lists, with i and j indexing characters.
+10. If A, B and R are all patches then they can also be handled similarly to lists – each of the default and declared patches-own variables would be put into the lists in the same order.
 
 ## HOW TO USE IT
 
@@ -463,7 +536,11 @@ The actual age of a case within a casebase can be manipulated with the use of `c
 
 ### cbr:lambda
 
-This is the reporter that does distance comparison. This is never called directly
+This may the reporter that does distance comparison. This is never called directly
+If a `cbr:lambda` is not provided, then the default comparator is called. The default comparator has the following specification.
+
+This is the comparator used in the example program to which this documentation is attached.
+
 
 #### Parameters
 
@@ -472,9 +549,9 @@ This is the reporter that does distance comparison. This is never called directl
 + An anonymous reporter or named reporter, which must take four parameters 
 
     - case base object
-    - yes-case
-    - no-case
-    - reference-case
+    - case A
+    - case B
+    - referent case R
 
 #### Returns
 
@@ -485,31 +562,31 @@ This *must* return one of the following
 + `cbr:incmp`
 + `cbr:eq`
 
-he current represantion that `cbr:lamda` must return if of the three cases
+The current represantion that `cbr:lamda` must return if of the three cases
 
-+ yes-case;
-+ no-case, and
-+ reference-case,
++ case A;
++ case B, and
++ referent case R,
 
-when the yes-case and no-case "are an equal distance" from the reference case.
+when the case A and the case B "are an equal distance" from the referent case R.
 
 ### cbr:eq
 
-This is used to standardise response from `cbr:lamda` so `cbr:match` will work correctly with it.
+This is used to standardise response from `cbr:lamda` so `cbr:match` and `cbr:matches` will work correctly with it.
 
 #### Parameters
 
 The current represantion that `cbr:lamda` must return if of the three cases
 
-+ yes-case;
-+ no-case, and
-+ reference-case,
++ case A;
++ case B, and
++ referent case R,
 
-when the yes-case is "equal"  distance from the reference case as the no-case.
+when the case A is "equal"  distance from the referent case R as the case B.
 
 ### cbr:gt
 
-This is used to standardise response from `cbr:lamda` so `cbr:match` will work correctly with it.
+This is used to standardise response from `cbr:lamda` so `cbr:match` and `cbr:matches` will work correctly with it.
 
 #### Parameters
 
@@ -519,11 +596,15 @@ None
 
 The current represantion that `cbr:lamda` must return if of the three cases
 
-+ yes-case;
-+ no-case, and
-+ reference-case,
++ case A;
++ case B, and
++ referent case R,
 
-when the yes-case is "further" from the reference case than the no-case.
++ case A;
++ case B, and
++ referent case R,
+
+when the case A is "further" from the referent case R than the case B.
 
 ### cbr:lt
 
@@ -537,11 +618,11 @@ None
 
 The current represantion that `cbr:lamda` must return if of the three cases
 
-+ yes-case;
-+ no-case, and
-+ reference-case,
++ case A;
++ case B, and
++ referent case R,
 
-when the yes-case is "closer" to the reference case than the no-case.
+when the case A is "closer" to the referent case R than the case B.
 
 ### cbr:incmp
 
@@ -553,9 +634,9 @@ when the yes-case is "closer" to the reference case than the no-case.
 
 The current represantion that `cbr:lamda` must return if any of  the three cases
 
-+ yes-case;
-+ no-case, and
-+ reference-case,
++ case A;
++ case B, and
++ referent case R,
 
 cannot be used for comparison.
 
@@ -714,19 +795,73 @@ The typical workflow is
 
 In addition to this you might to add the resultant state, decision and outcome back into the case base in order to emulate memory.
 
-This could be done with tables. There is commented code showing how to set this up using tables as state.
 
 ## EXTENDING THE MODEL
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+As mentioned above you can write your own default comparator. Here is an example of how to do this.
 
+```
+to-report comparator [some-case-base yes-case no-case reference-case]
+  let yes-state cbr:state some-case-base yes-case
+  let no-state cbr:state some-case-base no-case
+  let reference-state cbr:state some-case-base reference-case
+
+  if (cbr:decision some-case-base yes-case != cbr:decision some-case-base no-case and
+    cbr:decision some-case-base yes-case != cbr:decision some-case-base reference-case) [
+    report cbr:incmp
+  ]
+  if not is-list? yes-state or not is-list? no-state or not is-list? reference-state [
+    report cbr:incmp
+  ]
+  if length yes-state != length no-state  [
+    report cbr:incmp
+  ]
+  if length no-state != length reference-state [
+    report cbr:incmp
+  ]
+  if (item 0 yes-state = item 0 no-state and
+      item 1 yes-state = item 1 no-state and
+      item 2 yes-state = item 2 no-state) [
+    report cbr:eq
+  ]
+
+  let comparison-1-and-3 0
+  foreach n-values (length yes-state) [i -> i] [ i ->
+    if item i yes-state = item i reference-state [
+      set comparison-1-and-3 comparison-1-and-3 + 1
+    ]
+  ]
+  let comparison-2-and-3 0
+  foreach n-values (length no-state) [i -> i] [ i ->
+    if item i no-state = item i reference-state [
+      set comparison-2-and-3 comparison-2-and-3 + 1
+    ]
+  ]
+  if comparison-1-and-3 = 0 and comparison-2-and-3 = 0 [
+    report cbr:incmp
+  ]
+  if comparison-1-and-3 > comparison-2-and-3 [
+    report cbr:lt
+  ]
+  report cbr:gt
+end
+```
+
+This example makes sure the decision is the same in all the matched cases as well. The defautl comparator does not do this.
+
+Once this is implemented then it can loaded against a particular case base by using the command:
+
+```
+cbr:default 
+
+```
 ## NETLOGO FEATURES
 
 (interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
 
 ## RELATED MODELS
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+achsium.nlogo uses this case base reasoner.
 
 ## CREDITS AND REFERENCES
 

@@ -17,6 +17,7 @@ public class GreaterThanBoolean implements Reporter
 			NetLogoCase obj = (NetLogoCase)args[2].get();
 			NetLogoCase ref = (NetLogoCase)args[3].get();
 
+
             Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
             Object answer = null;
             if (caseBase.getCaseLambda() == null) {

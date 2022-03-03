@@ -330,7 +330,11 @@ public class CaseBase implements Collection<Case> {
         }
 
         if (a.getClass() !=  b.getClass())
-            return new Incomparable();
+            if (! (a instanceof ArrayAgentSet || a instanceof TreeAgentSet) &&
+                ! (b instanceof ArrayAgentSet || b  instanceof TreeAgentSet) ) { 
+                return new Incomparable();
+            }
+
 
         Object r;
         if (ref instanceof Case) {
@@ -340,81 +344,120 @@ public class CaseBase implements Collection<Case> {
         }
 
         if (a.getClass() !=  r.getClass())
-            return new Incomparable();
+            if (! (r instanceof ArrayAgentSet || r instanceof TreeAgentSet) ) {
+                return new Incomparable();
+            }
+
         if (a instanceof Double) {
             Double rMinusA = (Double) r - (Double) a;
             Double rMinusB = (Double) r - (Double) b;
-            if (Math.abs((double)rMinusA) == Math.abs((double)rMinusB) ) {
+           if (Math.abs((double)rMinusA) == Math.abs((double)rMinusB) ) {
                 return new Equal();
             } else if (Math.abs(rMinusA) < Math.abs(rMinusB)) {
-                return new LessThan();
-            } else {
                 return new GreaterThan();
+            } else {
+                return new LessThan();
             }
         } else if (a instanceof LogoList) {
 
             List aList = ((LogoList) a).toJava();
             List bList = ((LogoList) b).toJava();
             List rList = ((LogoList) r).toJava();
-            System.out.println("==============");
-            System.out.println("aSet  " + aList);
-            System.out.println("bSet  " + bList);
-            System.out.println("rSet  " + rList);
 
             Set anrList = (Set) aList.stream().
                 distinct().
                 filter(rList::contains).
                 collect(Collectors.toSet());
-            System.out.println("anrSet  " + anrList);
             Set bnrList = (Set) bList.stream().
                 distinct().
                 filter(rList::contains).
                 collect(Collectors.toSet());
-            System.out.println("bnrSet  " + bnrList);
 
             if (anrList.isEmpty() && bnrList.isEmpty())
                 return new Incomparable();
 
-            System.out.println("Greater than test");
             if (anrList.size() > bnrList.size())
                 return new GreaterThan();
 
-            System.out.println("Less than test");
             if (anrList.size() < bnrList.size())
                 return new LessThan();
 
-            System.out.println("Equality test");
             if (! anrList.equals(bnrList))
                 return new LessThan();
 
-            System.out.println("Equal");
+            return new Equal();
+
+         } else if (a instanceof TreeAgentSet || a instanceof ArrayAgentSet) {
+
+            List aList;
+            if (a instanceof TreeAgentSet) {
+                aList = ((TreeAgentSet) a).toLogoList().toJava();
+            } else {
+                aList = ((ArrayAgentSet) a).toLogoList().toJava();
+            }
+
+            List bList;
+            if (b instanceof TreeAgentSet) {
+                bList = ((TreeAgentSet) b).toLogoList().toJava();
+            } else {
+                bList = ((ArrayAgentSet) b).toLogoList().toJava();
+            }
+
+            List rList;
+            if (r instanceof TreeAgentSet) {
+                rList = ((TreeAgentSet) r).toLogoList().toJava();
+            } else {
+                rList = ((ArrayAgentSet) r).toLogoList().toJava();
+            }
+
+            Set anrList = (Set) aList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+            Set bnrList = (Set) bList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+
+            if (anrList.isEmpty() && bnrList.isEmpty())
+                return new Incomparable();
+
+            if (anrList.size() > bnrList.size())
+                return new GreaterThan();
+
+            if (anrList.size() < bnrList.size())
+                return new LessThan();
+
+            if (! anrList.equals(bnrList))
+                return new LessThan();
+
             return new Equal();
 
          } else if (a instanceof ArrayAgentSet) {
 
-             LogoList aList = ((ArrayAgentSet) a).toLogoList();
-             LogoList bList = ((ArrayAgentSet) b).toLogoList();
-             LogoList rList = ((ArrayAgentSet) r).toLogoList();
+            List aList = ((ArrayAgentSet) a).toLogoList().toJava();
+            List bList = ((ArrayAgentSet) b).toLogoList().toJava();
+            List rList = ((ArrayAgentSet) r).toLogoList().toJava();
 
-            LogoList  anrList = (LogoList) aList.intersect(rList);
-            if (anrList.isEmpty())
+            Set anrList = (Set) aList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+            Set bnrList = (Set) bList.stream().
+                distinct().
+                filter(rList::contains).
+                collect(Collectors.toSet());
+
+            if (anrList.isEmpty() && bnrList.isEmpty())
                 return new Incomparable();
 
-            LogoList bnrList = (LogoList) bList.intersect(rList);
-            if (bnrList.isEmpty())
-                return new Incomparable();
-
-            LogoList anbnrList = (LogoList) anrList.intersect(bnrList);
-            if (anbnrList.isEmpty())
-                return new Incomparable();
-
-            if ( anrList.length() > bnrList.length() )
+            if (anrList.size() > bnrList.size())
                 return new GreaterThan();
 
-            if ( anrList.length() < bnrList.length() )
+            if (anrList.size() < bnrList.size())
                 return new LessThan();
 
-            if ( ! anrList.equals(bnrList) )
+            if (! anrList.equals(bnrList))
                 return new LessThan();
 
             return new Equal();
