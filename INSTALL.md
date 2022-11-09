@@ -23,3 +23,10 @@ typical NetLogo installations:
 
 4. The `.bundled` subfolder of the extensions folder mentioned in Item 2 (for
 example, `/Applications/NetLogo N.n.n/extensions/.bundled` on Mac OS X).
+
+To use this include the NetLogo plugin cbr in the extensions clause at the
+top of the NetLogo code:
+
+```
+extensions [cbr]
+```
