@@ -1,4 +1,5 @@
 #!/bin/sh 
+
 rm \
 	bin/AddCase.class \
 	bin/AllCases.class \

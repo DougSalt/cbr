@@ -23,6 +23,10 @@ if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
     JAVAC='/cygdrive/c/Java/jdk-17.0.1/bin/javac'
     CLASS_PATH="bin;lib\netlogo-6.1.0.jar;lib\scala-library.jar"
+elif [ $(uname) = "Darwin" ]
+then
+    #JAVAC=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java
+    JAVAC=/usr/bin/javac
 fi
 
 if [ -n "$1" ]

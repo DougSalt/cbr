@@ -4,6 +4,9 @@ JAR=jar
 if [ $(uname) = "CYGWIN_NT-10.0" ]
 then
     JAR='/cygdrive/c/Java/jdk-17.0.1/bin/jar'
+elif [ $(uname) = "Darwin" ]
+then
+    JAR=/usr/bin/jar
 fi
 
 "$JAR" cvmf ../jar-manifest.txt ../test/cbr/cbr.jar \

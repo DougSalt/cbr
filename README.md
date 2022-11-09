@@ -4,52 +4,11 @@ A NetLogo case based reasoning toolkit, `cbr` as a NetLogo plugin.
 
 # INSTALLATION
 
-The file you are looking for is `cbr.jar` and maybe be found in `test/cbr`.
-
-To use it, stick the file in a sub-directory in the same directory as your
-NetLogo called `cbr`.
-
-To use this, include the NetLogo plugin `cbr` in the extensions clause at the
-top of the NetLogo code:
-
-```
-extensions [cbr]
-```
+See the [install document](INSTALL.md)
 
 # BUILD
 
-Assumptions: you are sane and running this on one of the following:
-
-1. Linux
-2. Cygwin on Windows
-3. Linux subsystem on Windows.
-
-In theory I could do all this with `.bat` files, but will only do so, if people
-really nag me about it.
-
-Have I mentioned anywhere else how much I absolutely detest and loathe Java. I
-have managed to compile this, but I have sorted out the dependencies are for
-creating the NetLogo plugin, and they are few. In Scala you can build a big jar
-- apparently not easily in Java. However because the dependencies in this are
-trivial, i.e. only the NetLogo library, then the cbr.jar is all that is needed.
-
-
-## Typical development workflow.
-
-1. Do you stuff in `src/main`, with testing in `src/test`
-2. `bin/compile.sh`
-3. `bin/build.sh` (does the release of the jar to the correct directory for
-   testing).
-4. `bin/run.sh`
-
-Rinse and repeat
-
-All the above can be done with: `bin/all.sh`
-
-To clean, then `bin/clean.sh`
-
-I have abandoned the usual conventions of of Java packaging, as NetLogo does
-not tend to work that way, being Scala based.
+See the [build document](BUILD.md)
 
 # MANIFEST
 
