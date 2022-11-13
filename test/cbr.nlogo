@@ -29,10 +29,10 @@ to run-tests
 
   test cbr:eq? case-base b b b  true "eq? STRING true"
   test cbr:eq? case-base c b b false "eq? STRING false"
-  test cbr:lt? case-base b a c true "lt? STRING true"
-  test cbr:lt? case-base a b c false "lt? STRING false"
-  test cbr:gt? case-base a b c true "gt? STRING true"
-  test cbr:gt? case-base b a c false "gt? STRING false"
+  test cbr:lt? case-base b a c false "lt? STRING false"
+  test cbr:lt? case-base a b c true "lt? STRING true"
+  test cbr:gt? case-base a b c false "gt? STRING false"
+  test cbr:gt? case-base b a c true "gt? STRING true"
   test cbr:incmp? case-base a b d true "incmp? STRING true"
   test cbr:incmp? case-base b a c false "incmp? STRING false"
 
@@ -82,10 +82,10 @@ to run-tests
 
   test cbr:eq? case-base some-case-1 some-case-1 some-case-1 true "eq? LIST true"
   test cbr:eq? case-base some-case-1 some-case-2 some-case-1 false "eq? LIST false"
-  test cbr:lt? case-base some-case-1 some-case-2 some-case-3 false "lt? LIST false"
-  test cbr:lt? case-base some-case-2 some-case-1 some-case-3 true "lt? LIST ture"
-  test cbr:gt? case-base some-case-2 some-case-1 some-case-3 false "gt? LIST false"
-  test cbr:gt? case-base some-case-1 some-case-2 some-case-3 true "gt? LIST true"
+  test cbr:lt? case-base some-case-1 some-case-2 some-case-3 true "lt? LIST true"
+  test cbr:lt? case-base some-case-2 some-case-1 some-case-3 false "lt? LIST false"
+  test cbr:gt? case-base some-case-2 some-case-1 some-case-3 true "gt? LIST true"
+  test cbr:gt? case-base some-case-1 some-case-2 some-case-3 false "gt? LIST false"
   test cbr:incmp? case-base some-case-1 some-case-2 some-case-3 false "incmp? LIST false"
   test cbr:incmp? case-base some-case-1 some-case-2 some-invalid-case false "incmp? LIST true"
 
@@ -159,16 +159,16 @@ to run-tests
   let double-d e
 
   set a cbr:add case-base double-a "install" true
-  set b cbr:add case-base double-b"install" true
+  set b cbr:add case-base double-b "install" true
   set c cbr:add case-base double-c "install" true
   set d cbr:add case-base double-d "install" true
 
   test cbr:eq? case-base b b b  true "eq? DOUBLE true"
   test cbr:eq? case-base c b b false "eq? DOUBLE false"
-  test cbr:lt? case-base a b c true "lt? DOUBLE true"
-  test cbr:lt? case-base b a c false "lt? DOUBLE false"
-  test cbr:gt? case-base b a c true "gt? DOUBLE true"
-  test cbr:gt? case-base a b c false "gt? DOUBLE false"
+  test cbr:lt? case-base a b c false "lt? DOUBLE false"
+  test cbr:lt? case-base b a c true "lt? DOUBLE true"
+  test cbr:gt? case-base b a c false "gt? DOUBLE false"
+  test cbr:gt? case-base a b c true "gt? DOUBLE true"
   test cbr:incmp? case-base a b d false "incmp? DOUBLE false"
   set d2 cbr:add case-base "string" "install" true
   test cbr:incmp? case-base b a d2 true "incmp? DOUBLE true"
@@ -189,16 +189,16 @@ to run-tests
   create-agents-d 2 [ set color grey ]
 
   set a cbr:add case-base agents-a "install" true
-  set b cbr:add case-base agents-b"install" true
+  set b cbr:add case-base agents-b "install" true
   set c cbr:add case-base agents-c "install" true
   set d cbr:add case-base agents-d "install" true
 
   test cbr:eq? case-base b b b true "eq? AGENT true"
   test cbr:eq? case-base a b b false "eq? AGENT false"
-  test cbr:lt? case-base b a c false "lt? AGENT false"
-  test cbr:lt? case-base a b c true "lt? AGENT true"
-  test cbr:gt? case-base a b c false "gt? AGENT false"
-  test cbr:gt? case-base b a c true "gt? AGENT true"
+  test cbr:lt? case-base b a c true "lt? AGENT true"
+  test cbr:lt? case-base a b c false "lt? AGENT false"
+  test cbr:gt? case-base a b c true "gt? AGENT true"
+  test cbr:gt? case-base b a c false "gt? AGENT false"
   test cbr:incmp? case-base a a a false "incmp? AGENT false"
   let invalid cbr:add case-base "string" "install" true
   test cbr:incmp? case-base b a invalid true "incmp? AGENT true"
@@ -336,7 +336,7 @@ When using `cbr:match`, then if there are more than one match then the case with
 
 If no `cbr:lamba` is provided then a default lambda is used. The specification for this is as follows.
 
-By default, the comparison algorithm has three arguments:
+The comparison algorithm always has three arguments:
 
 + Case A
 + Case B
@@ -516,6 +516,8 @@ A number of ticks, representing when the case was added to the case base. This i
 
 ### cbr:set-earliest
 
+This sets the earliest tick. If a case base has a creation time (as a tick) older than this, then upon the evocaction of the next `cbr:forget` then this case will be deleted, i.e. *forgotten*.
+
 #### Parameters
 
 + case base object 
@@ -612,8 +614,7 @@ This is used to standardise response from `cbr:lamda` so `cbr:match` will work c
 
 #### Parameters
 
-None
-
+None	
 #### Returns
 
 The current represantion that `cbr:lamda` must return if of the three cases
@@ -801,7 +802,7 @@ In addition to this you might to add the resultant state, decision and outcome b
 As mentioned above you can write your own default comparator. Here is an example of how to do this.
 
 ```
-to-report comparator [some-case-base yes-case no-case reference-case]
+to-report new-comparator [some-case-base yes-case no-case reference-case]
   let yes-state cbr:state some-case-base yes-case
   let no-state cbr:state some-case-base no-case
   let reference-state cbr:state some-case-base reference-case
@@ -852,7 +853,7 @@ This example makes sure the decision is the same in all the matched cases as wel
 Once this is implemented then it can loaded against a particular case base by using the command:
 
 ```
-cbr:default 
+cbr:lambda new-comparator  
 
 ```
 ## NETLOGO FEATURES

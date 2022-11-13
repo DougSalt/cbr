@@ -11,6 +11,7 @@ public class Match implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
+        Object result = Nobody$.MODULE$;
 		if (args[0].get() instanceof NetLogoCaseBase) {
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
 
@@ -21,14 +22,15 @@ public class Match implements Reporter
 
             // Create a temporary case to allow the use of the comparator.
 			NetLogoCase ref = new NetLogoCase(state, activity, outcome, time);
-            Object result = Nobody$.MODULE$;
 			caseBase.addCase(ref);
 
             Case[] cases = caseBase.toArray(new Case[caseBase.size()]);
             if (cases.length > 1) {
+                // This get the "obj" for comparison with "ref"
                 Case obj  = cases[0];
                 // One less because the last case is the reference case
                 for (int i = 0; i < cases.length - 1; i++) {
+                    // This get the "src" for comparison with "ref"
                     Case src = (Case)cases[i];
                     Object answer = null;
                     if ( caseBase.getCaseLambda() == null ) {
@@ -36,17 +38,21 @@ public class Match implements Reporter
                     } else {
                         Object[] lambdaArgs = new Object[] { caseBase, src, obj, ref };
                         answer = caseBase.getCaseLambda().report(context, lambdaArgs);
+                        //System.err.println("The object type of the answer is " + answer.getClass());
+                        
                     }
                     if (src.getOutcome() == Nobody$.MODULE$) {
                         continue;
-                    } else if (answer instanceof Incomparable) {
+                    } else if (answer instanceof Incomparable || answer == CaseBase.INCOMPARABLE) {
                         continue;
-                    } else if (answer instanceof LessThan) {
-                        result = obj;
-                    } else if (answer instanceof GreaterThan) {
+                    } else if (answer instanceof LessThan || answer == CaseBase.LESS_THAN ) {
+                        // The "obj" is replaced with "src"
                         obj = src;
                         result = src;
-                    } else if (answer instanceof Equal) {
+                    } else if (answer instanceof GreaterThan || answer == CaseBase.GREATER_THAN ) {
+                        // This original "obj" answer should persist to the next round
+                        result = obj;
+                    } else if (answer instanceof Equal || answer == CaseBase.EQUAL ) {
                         if (src.getRank() > obj.getRank()) {
                             result = src;
                             obj = src;
@@ -61,13 +67,11 @@ public class Match implements Reporter
                     }
                 }
             }
-
             caseBase.remove(ref);
-            return result;
-
 		} else {
 			throw new ExtensionException("Invalid case-base");
 		}
+        return result;
 	}
 
 	@Override

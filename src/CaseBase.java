@@ -354,9 +354,9 @@ public class CaseBase implements Collection<Case> {
            if (Math.abs((double)rMinusA) == Math.abs((double)rMinusB) ) {
                 return new Equal();
             } else if (Math.abs(rMinusA) < Math.abs(rMinusB)) {
-                return new GreaterThan();
-            } else {
                 return new LessThan();
+            } else {
+                return new GreaterThan();
             }
         } else if (a instanceof LogoList) {
 
@@ -377,10 +377,10 @@ public class CaseBase implements Collection<Case> {
                 return new Incomparable();
 
             if (anrList.size() > bnrList.size())
-                return new GreaterThan();
+                return new LessThan();
 
             if (anrList.size() < bnrList.size())
-                return new LessThan();
+                return new GreaterThan();
 
             if (! anrList.equals(bnrList))
                 return new LessThan();
@@ -423,10 +423,10 @@ public class CaseBase implements Collection<Case> {
                 return new Incomparable();
 
             if (anrList.size() > bnrList.size())
-                return new GreaterThan();
+                return new LessThan();
 
             if (anrList.size() < bnrList.size())
-                return new LessThan();
+                return new GreaterThan();
 
             if (! anrList.equals(bnrList))
                 return new LessThan();
@@ -452,10 +452,10 @@ public class CaseBase implements Collection<Case> {
                 return new Incomparable();
 
             if (anrList.size() > bnrList.size())
-                return new GreaterThan();
+                return new LessThan();
 
             if (anrList.size() < bnrList.size())
-                return new LessThan();
+                return new GreaterThan();
 
             if (! anrList.equals(bnrList))
                 return new LessThan();
@@ -477,10 +477,10 @@ public class CaseBase implements Collection<Case> {
                 return new Incomparable();
 
             if ( anrSet.size() > bnrSet.size() )
-                return new GreaterThan();
+                return new LessThan();
 
             if ( anrSet.size() < bnrSet.size() )
-                return new LessThan();
+                return new GreaterThan();
 
             if (! anrSet.equals(bnrSet))
                 return new LessThan();

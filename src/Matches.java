@@ -48,17 +48,17 @@ public class Matches implements Reporter
                     if (src.getOutcome() == Nobody$.MODULE$) {
                         continue;
                     }
-                    else if (answer instanceof Incomparable) {
+                    else if (answer instanceof Incomparable || answer == CaseBase.INCOMPARABLE) {
                         continue;
                     }
-                    else if (answer instanceof LessThan) {
+                    else if (answer instanceof GreaterThan || answer == CaseBase.GREATER_THAN) {
                         result = LogoList.Empty().lput(obj);
                     }
-                    else if (answer instanceof GreaterThan) {
+                    else if (answer instanceof LessThan || answer == CaseBase.LESS_THAN) {
                         obj = src;
                         result = LogoList.Empty().lput(src);
                     }
-                    else if (answer instanceof Equal) {
+                    else if (answer instanceof Equal || answer == CaseBase.EQUAL) {
                         if (src.getRank() > obj.getRank()) {
                             result = LogoList.Empty().lput(src);
                             obj = src;
