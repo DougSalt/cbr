@@ -1,5 +1,8 @@
 # Introduction
 
+This was the original specification for the extension. I need to review this
+and see if there is anything useful we can keep.
+
 # Commands
 
 ## cbr:new
