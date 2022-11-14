@@ -28,6 +28,7 @@ tramp
 tex2pdf.*
 *.log
 *.aux
+.DS_Store
 
 # Bibtex stuff
 
