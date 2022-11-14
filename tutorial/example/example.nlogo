@@ -29,18 +29,18 @@ to-report some-comparator [ some-case-base src-case obj-case ref-case ]
   let src-state cbr:state some-case-base src-case
   let src-decision cbr:decision some-case-base src-case
   let src-hits 0
-  show (word "src-state = " src-state)
-  show (word "src-decision = " src-decision)
+  ;show (word "src-state = " src-state)
+  ;show (word "src-decision = " src-decision)
   let obj-state cbr:state some-case-base obj-case
   let obj-decision cbr:decision some-case-base obj-case
   let obj-hits 0
-  show (word "obj-state = " obj-state)
-  show (word "obj-decision = " obj-decision)
+  ;show (word "obj-state = " obj-state)
+  ;show (word "obj-decision = " obj-decision)
 
   let ref-state cbr:state some-case-base ref-case
   let ref-decision cbr:decision some-case-base ref-case
-  show (word "ref-state = " ref-state)
-  show (word "ref-decision = " ref-decision)
+  ;show (word "ref-state = " ref-state)
+  ;show (word "ref-decision = " ref-decision)
 
   foreach n-values length ref-state [ i -> i ] [ i ->
     if item i ref-state = item i src-state [
@@ -53,31 +53,31 @@ to-report some-comparator [ some-case-base src-case obj-case ref-case ]
 
   if src-decision != ref-decision
   and obj-decision = ref-decision [
-    show "<>gt"
+    ;show "<>gt"
     report cbr:gt
   ]
 
   if  src-decision != ref-decision [
-      show "incmp"
+      ;show "incmp"
       report cbr:incmp
   ]
 
   if  obj-decision != ref-decision [
-    show "<>lt"
+    ;show "<>lt"
     report cbr:lt
   ]
 
   (ifelse
     src-hits > obj-hits [
-      show "lt"
+      ;show "lt"
       report cbr:lt
     ]
     src-hits < obj-hits [
-      show "gt"
+      ;show "gt"
       report cbr:gt
     ]
     [
-      show "eq"
+      ;show "eq"
       report cbr:eq
     ]
    )
@@ -117,8 +117,8 @@ to bespoke-comparator
   cbr:lambda simple-case-base some-comparator
   show "Is our mystery creature a fish?"
   set result cbr:match simple-case-base some-creature "fish?"
-  show result
   show cbr:outcome simple-case-base result
+  show result
 
 end
 
@@ -133,6 +133,28 @@ to-report comparator-pattern [ some-case-base src-case obj-case ref-case]
   report cbr:incmp
 end
 
+;to-report some-comparator [ some-case-base src-case obj-case ref-case ]
+;  let src-state cbr:state some-case-base src-case
+;  let src-decision cbr:decision some-case-base src-case
+;  let src-hits 0
+;  let obj-state cbr:state some-case-base obj-case
+;  let obj-decision cbr:decision some-case-base obj-case
+;  let obj-hits 0
+;  let ref-state cbr:state some-case-base ref-case
+;  let ref-decision cbr:decision some-case-base ref-case
+;  foreach n-values length ref-state [ i -> i ] [ i ->
+;    if item i ref-state = item i src-state [set src-hits src-hits + 1]
+;    if item i ref-state = item i obj-state [set obj-hits obj-hits + 1]
+;  ]
+;  if src-decision != ref-decision and obj-decision = ref-decision [report cbr:gt]
+;  if src-decision != ref-decision [report cbr:incmp]
+;  if  obj-decision != ref-decision [report cbr:lt]
+;  (ifelse
+;    src-hits > obj-hits [report cbr:lt]
+;    src-hits < obj-hits [report cbr:gt]
+;    [report cbr:eq]
+;  )
+;end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210

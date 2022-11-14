@@ -125,7 +125,7 @@ are relative to ecah other.
 
     So the code for a bespoke comparator might look like this in NetLogo: 
 
-    \includegraphics[width=9.5cm]{blank-comparator.png}
+    \includegraphics[width=9.5cm]{img/blank-comparator.png}
 
 \end{frame}
 
@@ -175,7 +175,16 @@ are relative to ecah other.
 
 \end{frame}
 
-\begin{frame}{Easy example}
+\begin{frame}{Meaningless example}
+
+    We are going to implement this simple decision tree (well kinda)
+
+    \vspace{0.5cm}
+
+    \includegraphics[width=9.5cm]{img/simple-decision-tree.png}
+
+\end{frame}
+\begin{frame}{Meaningless example (continued)}
 
     {\color{blue}\texttt{cbr:new}} to set a new case base, so:
 
@@ -201,7 +210,7 @@ are relative to ecah other.
 
 \end{frame}
 
-\begin{frame}{Easy example (continued) }
+\begin{frame}{Meaningless example (continued)}
 
     Add repeated multiple cases and then query using \texttt{{\color{blue}cbr:match}} or  \texttt{{\color{blue}cbr:matches}}, thus:
 
@@ -221,19 +230,20 @@ are relative to ecah other.
     This is using the standard, in-build comparator. For more details on this please see the docmentation in the github repository \url{https://gitlab.com/doug.salt/cbr}.
 
 \end{frame}
-\begin{frame}{Easy example (continued) }
+
+\begin{frame}{Meaningless example (continued)}
 
     So this here we another exmaple the code looks like eventually:
 
-    \includegraphics[width=9.5cm]{"simple-example-code.png"}
+    \includegraphics[width=9.5cm]{img/simple-example-code.png}
 
 \end{frame}
 
-\begin{frame}{Easy example (continued) }
+\begin{frame}{Meaningless example (continued)}
 
     And this is the result of clicking the "simple example" button.
 
-    \includegraphics[width=9.5cm]{"simple-example-result.png"}
+    \includegraphics[width=9.5cm]{img/simple-example-result.png}
 
 \end{frame}
 
@@ -267,6 +277,37 @@ are relative to ecah other.
 
     The only small problem being that there is a bug in the comparator by the
     looks of things which needs fixing.
+
+
+\end{frame}
+
+\begin{frame}{Bespoke lambda (continued)}
+
+    And this is the result of clicking the "bespoke comparator" button.
+
+    \vspace{1cm}
+
+    \includegraphics[width=9.5cm]{img/bespoke-comparator-result.png}
+
+\end{frame}
+
+\begin{frame}{Bespoke lambda (continued)}
+
+    So how is this done? We set up the case base.
+
+    \vspace{0.5cm}
+
+    \includegraphics[width=9.5cm]{img/bespoke-comparator-case-base.png}
+
+\end{frame}
+
+\begin{frame}{Bespoke lambda (continued)}
+
+   We code our comparator: 
+
+    \vspace{0.5cm}
+
+    \includegraphics[width=9.5cm]{img/bespoke-comparator-code.png}
 
 
 \end{frame}
