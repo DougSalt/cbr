@@ -29,6 +29,10 @@ tex2pdf.*
 *.log
 *.aux
 .DS_Store
+*.nav
+*.snm
+*.toc
+*.out
 
 # Bibtex stuff
 
