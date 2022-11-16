@@ -85,8 +85,9 @@ are relative to ecah other.
         \item the case B is 'same distance' to the referent case R than the
             case A using {\color{blue}\texttt{cbr:lamda}}  to the referent case
             R then {\color{blue}\texttt{cbr:eq}} is returned
-        \item the case B is 'closer' using {\color{blue}\texttt{cbr:lamda}}  to
-            the referent case R then {\color{blue}\texttt{cbr:lt}} is returned
+        \item the case B is incomparable to the referent case, then
+            {\color{blue}\texttt{cbr:lamda}}  to the referent case R then
+            {\color{blue}\texttt{cbr:incmp}} is returned
     \end{itemize}
 
 \end{frame}
@@ -106,7 +107,7 @@ are relative to ecah other.
     please consult the NetLogo CBR documentation which may be found here.
 
     \vspace{0.25cm}
-    \url{https://gitlab.com/doug.salt/cbr}
+    \url{https://github.com/DougSalt/cbr}
 
 
 \end{frame}
@@ -135,6 +136,7 @@ are relative to ecah other.
         \item {\color{red}\texttt{cbr:new}} - creates a new case base.
         \item {\color{red}\texttt{cbr:add}} - adds a case to a case base
         \item {\color{red}\texttt{cbr:match}} - returns the closes match
+        \item {\color{red}\texttt{cbr:matches}} - returns more than one match if it exists.
         \item {\color{red}\texttt{cbr:outcome}} - queries a case for its outcome
         \item {\color{red}\texttt{cbr:decision}} - queries a case for its decision
         \item {\color{red}\texttt{cbr:lambda}} - set the default compartor progam
@@ -147,30 +149,35 @@ are relative to ecah other.
     \begin{itemize}
         \item {\color{green}\texttt{cbr:combine}} - combines two case bases.
         \item {\color{green}\texttt{cbr:all}} - returns all the cases as a list.
-        \item {\color{green}\texttt{cbr:matches}} - returns more than one match if it exists.
         \item {\color{green}\texttt{cbr:state}} - gets the state of a particular case.
         \item {\color{green}\texttt{cbr:remove}} - removes a particular case.
         \item {\color{green}\texttt{cbr:set-time}} - sets the time at which a
             particular case base was created. This is done automatically at
             insertion into the case base. This commands just allows a degree of
             additional flexibility.
-    \end{itemize}
+        \item {\color{green}\texttt{cbr:get-time}} - queries  the time stamp 
+            for a particular case.
+        \item {\color{green}\texttt{cbr:set-earliest}} - sets the tick before
+            which all case bases will be "forgotten".
+     \end{itemize}
 \end{frame}
 
 \begin{frame}{Other commands (continued)}
 
     \begin{itemize}
-        \item {\color{green}\texttt{cbr:get-time}} - queries the querying of the
-            time for a particular case.
-        \item {\color{green}\texttt{cbr:set-earliest}} - sets the tick before
-            which all case bases will be "forgotten".
-        \item {\color{green}\texttt{cbr:get-earliest}} - allows the querying of
+       \item {\color{green}\texttt{cbr:get-earliest}} - allows the querying of
             the former.
         \item {\color{green}\texttt{cbr:forget}} - "forgets" all cases which are too old.
         \item {\color{green}\texttt{cbr:set-rank}} - sets the rank in the event of a tie breaker.
             the former.
         \item {\color{green}\texttt{cbr:get-rank}} - allows the querying of
             the former.
+        \item {\color{green}\texttt{cbr:get-size}} - reports on the maximum
+            size of the casebase.
+        \item {\color{green}\texttt{cbr:set-size}} - sets the maximum size of
+            the casebase.
+        \item {\color{green}\texttt{cbr:resize}} - explicitly tell the case
+            base to resize based on the set-size parameter.
     \end{itemize}
 
 \end{frame}
@@ -227,7 +234,7 @@ are relative to ecah other.
     So this constructs a "reference" case base to match, consisting of the state\texttt{some-creature}, and the decision \texttt{\color{red}"bird"}.
 
     \vspace{0.25cm}
-    This is using the standard, in-build comparator. For more details on this please see the docmentation in the github repository \url{https://gitlab.com/doug.salt/cbr}.
+    This is using the standard, in-build comparator. For more details on this please see the docmentation in the github repository \url{https://github.com/DougSalt/cbr}.
 
 \end{frame}
 
