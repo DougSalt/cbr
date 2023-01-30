@@ -3,7 +3,7 @@ See [here](https://github.com/NetLogo/NetLogo-Libraries#netlogo-libraries) for i
 Fork the repository ihttps://github.com/NetLogo/NetLogo-Libraries in github.com. This is done by clicking the fork button in the right hand corner of the screen. Then clone this repository
 
 ```
-git clone https://github.com/DougSalt/NetLogo-Libraries/compare
+git clone git@github.com:/DougSalt/NetLogo-Libraries
 ```
 
 make a new branch
@@ -11,7 +11,8 @@ make a new branch
 ```
 cd NetLogo-Libraries
 git checkout -b cbr
-git remote add upstream https://NetLogo/NetLogo-Libraries
+# I don't think you need to do this line.
+git remote add upstream git@github.com:NetLogo/NetLogo-Libraries.git
 ```
 
 copy the latest version of test/cbr/cbr.jar into the correct zip format
@@ -49,10 +50,9 @@ then
 
 ```
 git add extensions/cbr.jar
-git commit -m "Adding the CBR extension."
+git commit -a -m "Adding the CBR extension."
 git push
 ```
 
-The go up to https://github.com/NetLogo/NetLogo-Libraries/
-and press the button to do the pull and merge request.
+The go up to https://github.com/DougSalt/NetLogo and generate a pull request back to the original repository.
 
