@@ -5,8 +5,15 @@ Fork the repository ihttps://github.com/NetLogo/NetLogo-Libraries in github.com.
 ```
 git clone git@github.com:/DougSalt/NetLogo-Libraries
 ```
+or if you have used this before then on the main page of github for that
+project, switch to the 6.1 branch and pull to the state of the master.
+You need to update your local version of NetLogo-libraries, locally:
 
-make a new branch
+```
+git pull upstream 6.1
+```
+
+Make a new branch
 
 ```
 cd NetLogo-Libraries
@@ -20,8 +27,8 @@ by using the command
 
 ```
 cd ~/git/cbr/test/cbr
-zip cbr-1.0.1.jar cbr.jar
-cp cbr.jar ~/git/NetLogo-Libraries/extensions
+zip cbr-1.0.1.zip cbr.jar
+cp cbr-1.0.1.zip  ~/git/NetLogo-Libraries/extensions
 ```
 
 where `1.0.1` is the version number
