@@ -6,6 +6,7 @@ then
     JAR='/cygdrive/c/Java/jdk-17.0.1/bin/jar'
 elif [ $(uname) = "Darwin" ]
 then
+    export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
     JAR=/usr/bin/jar
 fi
 

@@ -1,8 +1,25 @@
+# WARNING
+
+As per usual Java is borked and broken. If you use above version 8 then this
+will not work, and I have not had time to fix it yet.
+
+To fix on OSX
+
+```
+brew tap homebrew/cask-versions
+brew install --cask temurin8
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+```
+
+# BUILD
+
+Then run the remainder of this document.
+
 From the git source directory.
 
 1. ``bin/compile.sh``
 2. ``bin/build.sh``
-3. ``cp ../test/cbr/cbr.jar`` to a sub-directory `cbr` directory wherever your model is.
+3. ``cp test/cbr/cbr.jar`` to a sub-directory `cbr` directory wherever your model is.
 
 Assumptions: you are sane and running this on one of the following:
 

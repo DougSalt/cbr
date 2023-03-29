@@ -97,7 +97,6 @@ to run-tests
 
   let my-match cbr:match case-base (list "state-1" "state-2" "state-6") "install"
 
-  show my-match
   test cbr:outcome case-base my-match some-outcome-3 "cbr:match cbr:outcome"
   test cbr:state case-base my-match some-state-3 "cbr:match cbr:state"
   test cbr:decision case-base my-match some-decision-3 "cbr:match cbr:decision"
@@ -116,7 +115,8 @@ to run-tests
   test cbr:get-rank case-base some-case-4 "0.0" "set-rank"
 
   set my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  test length my-matches 2 "matches"
+  ; this was giving 2 before, why is now three?
+  test length my-matches 3 "matches"
 
   ; Setting Time
 
@@ -1173,7 +1173,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

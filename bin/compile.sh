@@ -25,7 +25,7 @@ then
     CLASS_PATH="bin;lib\netlogo-6.1.0.jar;lib\scala-library.jar"
 elif [ $(uname) = "Darwin" ]
 then
-    #JAVAC=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java
+    export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
     JAVAC=/usr/bin/javac
 fi
 

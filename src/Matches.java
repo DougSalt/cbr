@@ -24,6 +24,7 @@ public class Matches implements Reporter
             // Er I, dunno - go figure
             //Object result = Nobody$.MODULE$;
             LogoList result = LogoList.Empty();
+            Boolean foundEquality = false;
 			caseBase.addCase(ref);
 
             //if (caseBase.getMaxSize() < Integer.MAX_VALUE) {
@@ -36,7 +37,7 @@ public class Matches implements Reporter
             if (cases.length > 1) {
                 Case obj  = cases[0];
                 result = result.lput(obj);
-                for (int i = 1; i < cases.length; i++) {
+                for (int i = 0; i < cases.length - 1; i++) {
                     Case src = (Case)cases[i];
                     Object answer = null;
                     if ( caseBase.getCaseLambda() == null ) {
@@ -47,18 +48,19 @@ public class Matches implements Reporter
                     }
                     if (src.getOutcome() == Nobody$.MODULE$) {
                         continue;
-                    }
-                    else if (answer instanceof Incomparable || answer == CaseBase.INCOMPARABLE) {
+                    } else if (answer instanceof Incomparable || answer == CaseBase.INCOMPARABLE) {
                         continue;
-                    }
-                    else if (answer instanceof GreaterThan || answer == CaseBase.GREATER_THAN) {
-                        result = LogoList.Empty().lput(obj);
-                    }
-                    else if (answer instanceof LessThan || answer == CaseBase.LESS_THAN) {
-                        obj = src;
-                        result = LogoList.Empty().lput(src);
-                    }
-                    else if (answer instanceof Equal || answer == CaseBase.EQUAL) {
+                    } else if (answer instanceof LessThan || answer == CaseBase.LESS_THAN) {
+                        if (! foundEquality) {
+                            obj = src;
+                            result = LogoList.Empty().lput(src);
+                        }
+                    } else if (answer instanceof GreaterThan || answer == CaseBase.GREATER_THAN) {
+                        if (! foundEquality) {
+                            result = LogoList.Empty().lput(obj);
+                        }
+                    } else if (answer instanceof Equal || answer == CaseBase.EQUAL) {
+                        foundEquality = true;
                         if (src.getRank() > obj.getRank()) {
                             result = LogoList.Empty().lput(src);
                             obj = src;
