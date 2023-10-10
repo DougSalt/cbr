@@ -27,11 +27,11 @@ by using the command
 
 ```
 cd ~/git/cbr/test/cbr
-zip cbr-1.0.1.zip cbr.jar
-cp cbr-1.0.1.zip  ~/git/NetLogo-Libraries/extensions
+zip cbr-1.0.2.zip cbr.jar
+cp cbr-1.0.2.zip  ~/git/NetLogo-Libraries/extensions
 ```
 
-where `1.0.1` is the version number
+where `1.0.2` is the version number
 
 Add this file to `NetLogo-Libraries/extensions` directory.
 
@@ -48,9 +48,9 @@ of the riple: state,decision,outcome. This framework can return single or
 multiple triples from the case base which match a given state and decision
 using the the inbuilt distance function or a user defined function. Command to dynamically modify the case base are also provided, such as addition and deletion of specific cases based on age, or size of case base.
 """
-    version: "1.0.1"
+    version: "1.0.2"
     homepage: "https://github.com/DougSalt/cbr.git"
-    downloadURL: "https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/cbr-1.0.1.zip"
+    downloadURL: "https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/cbr-1.0.2.zip"
 }
 
 then
