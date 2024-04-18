@@ -44,6 +44,7 @@ See the [build document](BUILD.md)
 + tutorial - a presentation giving a brief explanation of how to use the
   NetLogo extension
 + UPGRADING.md - instructions on what to change if you should have to upgrade the version of NetLogo.
++ CITATION.cff - used by Zenodo to generate the citation required for this software.
 
 
 # INSTRUCTIONS

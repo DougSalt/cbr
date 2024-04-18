@@ -115,8 +115,7 @@ to run-tests
   test cbr:get-rank case-base some-case-4 "0.0" "set-rank"
 
   set my-matches cbr:matches case-base (list "state-1" "state-2" "state-3") "install"
-  ; this was giving 2 before, why is now three?
-  test length my-matches 3 "matches"
+  test length my-matches 2 "matches"
 
   ; Setting Time
 
@@ -209,10 +208,211 @@ to run-tests
   set d2 cbr:add case-base agents-d "install-d2" true
   test length (cbr:matches case-base agents-d "install") 3 "matches AGENT"
 
+
+  output-print "Testing Ben's data..."
+
+
+  let grass-table table:make
+  table:put grass-table "fertiliser"  true
+  table:put grass-table "plough" false
+  table:put grass-table "seed" true
+  table:put grass-table "harbicide" false
+  table:put grass-table "tractor" true
+  table:put grass-table "cow" false
+  table:put grass-table "bull" false
+  table:put grass-table "ewe" false
+  table:put grass-table "tup" false
+
+  let wheat-table table:make
+  table:put wheat-table "fertiliser"  true
+  table:put wheat-table "plough" true
+  table:put wheat-table "seed" true
+  table:put wheat-table "harbicide" true
+  table:put wheat-table "tractor" true
+  table:put wheat-table "cow" false
+  table:put wheat-table "bull" false
+  table:put wheat-table "ewe" false
+  table:put wheat-table "tup" false
+
+  let barley-table table:make
+  table:put barley-table "fertiliser"  true
+  table:put barley-table "plough" true
+  table:put barley-table "seed" true
+  table:put barley-table "harbicide" true
+  table:put barley-table "tractor" true
+  table:put barley-table "cow" false
+  table:put barley-table "bull" false
+  table:put barley-table "ewe" false
+  table:put barley-table "tup" false
+
+  let beef-table table:make
+  table:put beef-table "fertiliser"  false
+  table:put beef-table "plough" false
+  table:put beef-table "seed" false
+  table:put beef-table "harbicide" false
+  table:put beef-table "tractor" true
+  table:put beef-table "cow" true
+  table:put beef-table "bull" true
+  table:put beef-table "ewe" false
+  table:put beef-table "tup" false
+
+  let sheep-table table:make
+  table:put sheep-table "fertiliser"  false
+  table:put sheep-table "plough" false
+  table:put sheep-table "seed" false
+  table:put sheep-table "harbicide" false
+  table:put sheep-table "tractor" true
+  table:put sheep-table "cow" false
+  table:put sheep-table "bull" false
+  table:put sheep-table "ewe" true
+  table:put sheep-table "tup" true
+
+
+
+  ;; build the first test case-bases
+
+  let bens-case-base cbr:new
+  let grass cbr:add bens-case-base grass-table "equation" "grass"
+  let wheat cbr:add bens-case-base wheat-table "equation" "wheat"
+  let barley cbr:add bens-case-base barley-table "equation" "barley"
+  let beef cbr:add bens-case-base beef-table "equation" "beef"
+  let sheep cbr:add bens-case-base sheep-table "equation" "sheep"
+
+
+  ; build the test case
+  let bens-test-table table:make
+  table:put bens-test-table "fertiliser"  false
+  table:put bens-test-table "plough" false
+  table:put bens-test-table "seed" false
+  table:put bens-test-table "harbicide" false
+  table:put bens-test-table "tractor" true
+  table:put bens-test-table "cow" false
+  table:put bens-test-table "bull" false
+  table:put bens-test-table "ewe" true
+  table:put bens-test-table "tup" true
+
+  cbr:lambda bens-case-base bens-comparator
+
+  test cbr:outcome bens-case-base (cbr:match bens-case-base bens-test-table "equation") "sheep" "match BEN'S single case"
+  test cbr:outcome bens-case-base (item 0 (cbr:matches bens-case-base bens-test-table "equation")) "sheep" "matches BEN'S single case"
+
+  set bens-test-table table:make
+  table:put bens-test-table "fertiliser"  true
+  table:put bens-test-table "plough" true
+  table:put bens-test-table "seed" true
+  table:put bens-test-table "harbicide" true
+  table:put bens-test-table "tractor" true
+  table:put bens-test-table "cow" false
+  table:put bens-test-table "bull" false
+  table:put bens-test-table "ewe" false
+  table:put bens-test-table "tup" false
+
+  test cbr:outcome bens-case-base (cbr:match bens-case-base bens-test-table "equation") "wheat" "match BEN'S double case"
+  test (sort map [ case -> cbr:outcome bens-case-base case ] cbr:matches bens-case-base bens-test-table "equation") ["barley" "wheat"] "matches BEN's double case"
+
+  set bens-test-table table:make
+  table:put bens-test-table "fertiliser"  false
+  table:put bens-test-table "plough" false
+  table:put bens-test-table "seed" false
+  table:put bens-test-table "harbicide" false
+  table:put bens-test-table "tractor" true
+  table:put bens-test-table "cow" false
+  table:put bens-test-table "bull" false
+  table:put bens-test-table "ewe" false
+  table:put bens-test-table "tup" false
+
+  test cbr:outcome bens-case-base (cbr:match bens-case-base bens-test-table "equation") "grass" "match BENS AGENT"
+  test (sort map [ case -> cbr:outcome bens-case-base case ] cbr:matches bens-case-base bens-test-table "equation") ["beef" "grass" "sheep"] "matches BEN's double case"
+  foreach cbr:matches bens-case-base bens-test-table "equation" [ case ->
+    output-print cbr:outcome bens-case-base case
+  ]
+
   output-print "cbr: ...ending tests."
   stop
+end
+
+to-report bens-comparator [ some-case-base src-case obj-case ref-case ]
+
+  let src-state cbr:state some-case-base src-case
+  let src-decision cbr:decision some-case-base src-case
+  let src-hits 0
+
+  let obj-state cbr:state some-case-base obj-case
+  let obj-decision cbr:decision some-case-base obj-case
+  let obj-hits 0
+
+  let ref-state cbr:state some-case-base ref-case
+  let ref-decision cbr:decision some-case-base ref-case
 
 
+  ;; get common keys in the tables
+  let src-ref reduce intersect (list table:keys src-state table:keys ref-state)
+  let obj-ref reduce intersect (list table:keys obj-state table:keys ref-state)
+
+
+  ;; score +2 for every common key
+  set src-hits 2 * length src-ref
+  set obj-hits 2 * length obj-ref
+
+  ;; if any common keys:
+  ;; score +1 for equal values for each common key
+  if length src-ref > 0 [
+    foreach src-ref [ i ->
+      if table:get ref-state i = table:get src-state i [
+        set src-hits src-hits + 1
+      ]
+    ]
+  ]
+
+  if length obj-ref > 0 [
+    foreach obj-ref [ i ->
+      if table:get ref-state i = table:get obj-state i [
+        set obj-hits obj-hits + 1
+      ]
+    ]
+  ]
+
+
+
+  if src-decision != ref-decision
+  and obj-decision = ref-decision [
+    ;show "<>gt"
+    report cbr:gt
+  ]
+
+  if  src-decision != ref-decision [
+    ;show "incmp"
+    report cbr:incmp
+  ]
+
+  if  obj-decision != ref-decision [
+    ;show "<>lt"
+    report cbr:lt
+  ]
+
+  (ifelse
+    src-hits > obj-hits [
+      ;show "lt"
+      report cbr:lt
+    ]
+    src-hits < obj-hits [
+      ;show "gt"
+      report cbr:gt
+    ]
+    src-hits = obj-hits [
+      ;show "gt"
+      report cbr:eq
+    ]
+    [
+      ;show "eq"
+      report cbr:incmp
+    ]
+  )
+end
+
+; https://stackoverflow.com/questions/26928738/find-lists-intersection-in-netlogo
+to-report intersect [a b]
+  report (filter [x -> member? x b ] a)
 end
 
 
