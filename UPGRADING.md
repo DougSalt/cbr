@@ -1,4 +1,4 @@
-The files you need to change are:
+The files you need to change are for an upgrade to NetLogo are:
 
 If N.x.y is the release of NetLogo
 
