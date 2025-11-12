@@ -10,8 +10,6 @@ import org.nlogo.api.ImportErrorHandler;
 import org.nlogo.core.ExtensionObject;
 import java.util.List;
 
-import java.io.*;
-
 /**
  * @author GP40285
  *
@@ -43,14 +41,14 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("lambda", new CaseLambda());
 		primManager.addPrimitive("match", new Match());
 		primManager.addPrimitive("matches", new Matches());
-		primManager.addPrimitive("eq", new Equal());
-		primManager.addPrimitive("eq?", new EqualBoolean());
-		primManager.addPrimitive("lt",  new LessThan());
-		primManager.addPrimitive("lt?",  new LessThanBoolean());
-		primManager.addPrimitive("gt", new GreaterThan());
-		primManager.addPrimitive("gt?", new GreaterThanBoolean());
-		primManager.addPrimitive("incmp", new Incomparable());
-		primManager.addPrimitive("incmp?", new IncomparableBoolean());
+		primManager.addPrimitive("eq", new ComparisonResult(PartiallyOrderedComparison.EQUAL));
+		primManager.addPrimitive("eq?", new CompareBoolean(PartiallyOrderedComparison.EQUAL));
+		primManager.addPrimitive("lt",  new ComparisonResult(PartiallyOrderedComparison.LESS_THAN));
+		primManager.addPrimitive("lt?",  new CompareBoolean(PartiallyOrderedComparison.LESS_THAN));
+		primManager.addPrimitive("gt", new ComparisonResult(PartiallyOrderedComparison.GREATER_THAN));
+		primManager.addPrimitive("gt?", new CompareBoolean(PartiallyOrderedComparison.GREATER_THAN));
+		primManager.addPrimitive("incmp", new ComparisonResult(PartiallyOrderedComparison.INCOMPARABLE));
+		primManager.addPrimitive("incmp?", new CompareBoolean(PartiallyOrderedComparison.INCOMPARABLE));
 	}
 
 	@Override

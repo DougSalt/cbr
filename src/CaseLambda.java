@@ -17,6 +17,7 @@ public class CaseLambda implements Command
 			if (args[1].get() instanceof AnonymousReporter)
 			{
 				AnonymousReporter reporter = args[1].getReporter();
+				
 				//TODO: We also need to do some validation of the Reporter
       	        // My feeling is we could do this with some kind of activation of
                 // the code with say 3 string cases.

@@ -15,13 +15,13 @@ public class GetMaxSize implements Reporter
 		}
 		else
 		{
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("Argument to cbr:get-max-size must be a case base");
 		}
 	}
 
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType()}, Syntax.NumberType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() }, Syntax.NumberType());
 	}
 }

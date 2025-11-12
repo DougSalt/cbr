@@ -19,22 +19,12 @@
  */
 
 
-import org.nlogo.api.*;
-import org.nlogo.agent.*;
-
-import java.io.IOException;
-import java.time.*;
-
-import org.nlogo.core.*;
-import org.nlogo.api.Reporter;
-import java.util.*;
-import java.util.stream.Collectors;
-
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * <!-- CaseBase -->
@@ -50,12 +40,8 @@ public class CaseBase implements Collection<Case> {
 
 	private Double tickInfimum = -1.0;
 
-	private AnonymousReporter caseLambda = null;
+	protected PartiallyComparableLambda<Case> caseLambda = null;
 
-    public static final String LESS_THAN = "less than";
-    public static final String GREATER_THAN = "greater than";
-    public static final String INCOMPARABLE = "incomparable";
-    public static final String EQUAL = "equal";
 	/*
 	 * Have a think about tick list and whether that could be maintained.
 	 * At each element in the tick list we'd record the last + 1 element in the
@@ -70,6 +56,12 @@ public class CaseBase implements Collection<Case> {
 	 */
 	public CaseBase() {
 		base = new ArrayList<Case>();
+		caseLambda = new DefaultLambda();
+	}
+	
+	public CaseBase(PartiallyComparableLambda<Case> caseLambda) {
+		base = new ArrayList<Case>();
+		this.caseLambda = caseLambda;
 	}
 
     public void addCase(Case c) {
@@ -253,242 +245,65 @@ public class CaseBase implements Collection<Case> {
             base.removeIf(c -> c.getTime() < tickInfimum);
     }
 
-	public AnonymousReporter getCaseLambda()
+	public PartiallyComparableLambda<Case> getCaseLambda()
 	{
 		return caseLambda;
 	}
 
-	public void setCaseLambda(AnonymousReporter caseLambda)
+	public void setCaseLambda(PartiallyComparableLambda<Case> caseLambda)
 	{
 		this.caseLambda = caseLambda;
 	}
 
-	public boolean isSame(Argument[] args, Context context)
-		throws ExtensionException
+	public boolean isSame(Case src, Case obj, Case ref)
 	{
-	    CaseBase cbr = (CaseBase) args[0].get();
-        Case src = (Case) args[1].get();
-        Case obj = (Case) args[2].get();
-        Case ref = (Case) args[3].get();
-        Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
-		Object result = caseLambda.report(context, convertedArgs);
-		return EQUAL.equalsIgnoreCase(result.toString());
+        return caseLambda.cmp(src, obj, ref) == PartiallyOrderedComparison.EQUAL;
 	}
 
-	public boolean isCloser(Argument[] args, Context context)
-		throws ExtensionException
+	public boolean isCloser(Case src, Case obj, Case ref)
 	{
-        CaseBase cbr = (CaseBase) args[0].get();
-        Case src = (Case) args[1].get();
-        Case obj = (Case) args[2].get();
-        Case ref = (Case) args[3].get();
-        Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
-		Object result = caseLambda.report(context,convertedArgs);
-		return LESS_THAN.equalsIgnoreCase(result.toString());
+		return caseLambda.cmp(src, obj, ref) == PartiallyOrderedComparison.LESS_THAN;
 	}
 
-	public boolean isComparable(Argument[] args, Context context)
-		throws ExtensionException
+	public boolean isComparable(Case src, Case obj, Case ref)
 	{
-	    CaseBase cbr = (CaseBase) args[0].get();
-        Case src = (Case) args[1].get();
-        Case obj = (Case) args[2].get();
-        Case ref = (Case) args[3].get();
-        Object[] convertedArgs = new Object[]{ cbr, src, obj, ref};
-		Object result = caseLambda.report(context,convertedArgs);
-		return !GREATER_THAN.equalsIgnoreCase(result.toString());
+		return caseLambda.cmp(src, obj, ref) != PartiallyOrderedComparison.INCOMPARABLE;
 	}
-    public static Set convertToSet(String string) {
-
-      // Result hashset
-      Set resultSet = new HashSet();
-
-      for (int i = 0; i < string.length(); i++) {
-          resultSet.add(new Character(string.charAt(i)));
-      }
-
-      // Return result
-      return resultSet;
-    }
-	public Object defaultLambda(Object src, Object obj, Object ref)
-		throws ExtensionException
-	{
-        Object result = Nobody$.MODULE$;
-
-        Object a;
-        if (src instanceof Case) {
-            a = ((Case) src).getState();
-        } else {
-            a = src;
-        }
-
-        Object b;
-        if (obj instanceof Case) {
-            b = ((Case) obj).getState();
-        } else {
-            b = obj;
-        }
-
-        if (a.getClass() !=  b.getClass())
-            if (! (a instanceof ArrayAgentSet || a instanceof TreeAgentSet) &&
-                ! (b instanceof ArrayAgentSet || b  instanceof TreeAgentSet) ) { 
-                return new Incomparable();
-            }
-
-
-        Object r;
-        if (ref instanceof Case) {
-            r = ((Case) ref).getState();
-        } else {
-            r = ref;
-        }
-
-        if (a.getClass() !=  r.getClass())
-            if (! (r instanceof ArrayAgentSet || r instanceof TreeAgentSet) ) {
-                return new Incomparable();
-            }
-
-        if (a instanceof Double) {
-            Double rMinusA = (Double) r - (Double) a;
-            Double rMinusB = (Double) r - (Double) b;
-           if (Math.abs((double)rMinusA) == Math.abs((double)rMinusB) ) {
-                return new Equal();
-            } else if (Math.abs(rMinusA) < Math.abs(rMinusB)) {
-                return new LessThan();
-            } else {
-                return new GreaterThan();
-            }
-        } else if (a instanceof LogoList) {
-
-            List aList = ((LogoList) a).toJava();
-            List bList = ((LogoList) b).toJava();
-            List rList = ((LogoList) r).toJava();
-
-            Set anrList = (Set) aList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-            Set bnrList = (Set) bList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-
-            if (anrList.isEmpty() && bnrList.isEmpty())
-                return new Incomparable();
-
-            if (anrList.size() > bnrList.size())
-                return new LessThan();
-
-            if (anrList.size() < bnrList.size())
-                return new GreaterThan();
-
-            if (! anrList.equals(bnrList))
-                return new LessThan();
-
-            return new Equal();
-
-         } else if (a instanceof TreeAgentSet || a instanceof ArrayAgentSet) {
-
-            List aList;
-            if (a instanceof TreeAgentSet) {
-                aList = ((TreeAgentSet) a).toLogoList().toJava();
-            } else {
-                aList = ((ArrayAgentSet) a).toLogoList().toJava();
-            }
-
-            List bList;
-            if (b instanceof TreeAgentSet) {
-                bList = ((TreeAgentSet) b).toLogoList().toJava();
-            } else {
-                bList = ((ArrayAgentSet) b).toLogoList().toJava();
-            }
-
-            List rList;
-            if (r instanceof TreeAgentSet) {
-                rList = ((TreeAgentSet) r).toLogoList().toJava();
-            } else {
-                rList = ((ArrayAgentSet) r).toLogoList().toJava();
-            }
-
-            Set anrList = (Set) aList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-            Set bnrList = (Set) bList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-
-            if (anrList.isEmpty() && bnrList.isEmpty())
-                return new Incomparable();
-
-            if (anrList.size() > bnrList.size())
-                return new LessThan();
-
-            if (anrList.size() < bnrList.size())
-                return new GreaterThan();
-
-            if (! anrList.equals(bnrList))
-                return new LessThan();
-
-            return new Equal();
-
-         } else if (a instanceof ArrayAgentSet) {
-
-            List aList = ((ArrayAgentSet) a).toLogoList().toJava();
-            List bList = ((ArrayAgentSet) b).toLogoList().toJava();
-            List rList = ((ArrayAgentSet) r).toLogoList().toJava();
-
-            Set anrList = (Set) aList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-            Set bnrList = (Set) bList.stream().
-                distinct().
-                filter(rList::contains).
-                collect(Collectors.toSet());
-
-            if (anrList.isEmpty() && bnrList.isEmpty())
-                return new Incomparable();
-
-            if (anrList.size() > bnrList.size())
-                return new LessThan();
-
-            if (anrList.size() < bnrList.size())
-                return new GreaterThan();
-
-            if (! anrList.equals(bnrList))
-                return new LessThan();
-
-            return new Equal();
-
-        } else if (a instanceof String) {
-
-            Set aSet = convertToSet((String) a);
-            Set bSet = convertToSet((String) b);
-            Set rSet = convertToSet((String) r);
-
-            Set anrSet = new HashSet(aSet);
-            anrSet.retainAll(rSet);
-
-            Set bnrSet = new HashSet(bSet);
-            bnrSet.retainAll(rSet);
-            if (anrSet.isEmpty() && bnrSet.isEmpty())
-                return new Incomparable();
-
-            if ( anrSet.size() > bnrSet.size() )
-                return new LessThan();
-
-            if ( anrSet.size() < bnrSet.size() )
-                return new GreaterThan();
-
-            if (! anrSet.equals(bnrSet))
-                return new LessThan();
-
-            return new Equal();
-        }
-
-        return result;
-
+	
+	public Collection<Case> getStateMatches(Object state) {
+		return getStateMatches(state, caseLambda);
 	}
-}
+	
+	public Collection<Case> getStateMatches(Case ref) {
+		return getStateMatches(ref, caseLambda);
+	}
+	
+	public Collection<Case> getStateMatches(Object state, PartiallyComparableLambda<Case> lambda) {
+		return getStateMatches(new Case(state, null, null, 0.0), lambda);
+	}
+	
+	public Collection<Case> getStateMatches(Case ref, PartiallyComparableLambda<Case> lambda) {
+		Set<Case> matches = new HashSet<Case>();
+		for(Case c: base) {
+			if(matches.isEmpty()) {
+				matches.add(c);
+			}
+			else {
+				Set<Case> rm = new HashSet<Case>();
+				for(Case d: matches) {
+					PartiallyOrderedComparison pcmp = lambda.cmp(c, d, ref);
+					if(pcmp == PartiallyOrderedComparison.LESS_THAN) {
+						// c is closer to ref than d: remove d
+						rm.add(d);
+					}
+					if(pcmp != PartiallyOrderedComparison.GREATER_THAN) {
+						// c is as close to ref as d, nearer to ref than d, or incomparable
+						matches.add(c);
+					}
+				}
+				matches.removeAll(rm);
+			}
+		}
+		return matches;
+	}
+ }

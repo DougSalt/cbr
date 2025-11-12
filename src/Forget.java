@@ -2,8 +2,6 @@ import org.nlogo.api.*;
 import org.nlogo.api.Command;
 import org.nlogo.core.*;
 
-import java.time.*;
-
 public class Forget implements Command
 {
 	@Override
@@ -17,7 +15,7 @@ public class Forget implements Command
 		}
 		else
 		{
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("Argument to cbr:forget must be a case base");
 		}
 	}
 

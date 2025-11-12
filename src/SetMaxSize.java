@@ -19,12 +19,12 @@ public class SetMaxSize implements Command
 			}
 			else
 			{
-				throw new ExtensionException("Invalid size");
+				throw new ExtensionException("Second argument to cbr:set-max-size must be a number");
 			}
 		}
 		else
 		{
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("First argument to cbr:set-max-size must be a case base");
 		}
 	}
 

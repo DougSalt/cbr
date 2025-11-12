@@ -24,7 +24,7 @@ public class SetEarliest implements Command
 		}
 		else
 		{
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("First argument to cbr:set-earliest must be a case base");
 		}
 	}
 

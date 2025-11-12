@@ -1,9 +1,9 @@
 /**
  * 
  */
-import java.io.IOException;
 import java.util.*;
 
+import org.nlogo.api.ExtensionException;
 import org.nlogo.core.ExtensionObject;
 import org.nlogo.core.LogoList;
 
@@ -43,6 +43,23 @@ public class NetLogoCase extends Case implements ExtensionObject {
 		return list;
 	}
 	
+	public static NetLogoCase fromLogoList(LogoList list) throws ExtensionException {
+		if(list.length() < 4) {
+			throw new ExtensionException("Constructing a case from a list requires a list of length 4. List "
+				+ list.toString() + " has length " + list.length());
+		}
+		Object state = list.get(0);
+		Object activity = list.get(1);
+		Object outcome = list.get(2);
+		Object time = list.get(3);
+		if(time instanceof Double) {
+			return new NetLogoCase(state, activity, outcome, (Double)time);
+		}
+		else {
+			throw new ExtensionException("Constructing a case from a list requires the 4th item to be a number ("
+				+ time.toString() + ")");
+		}
+	}
 	
 	
 	private static final long next() {
@@ -130,4 +147,5 @@ public class NetLogoCase extends Case implements ExtensionObject {
 	{
 		return Objects.hash(id);
 	}
+
 }

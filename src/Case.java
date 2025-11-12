@@ -24,12 +24,12 @@ import java.io.IOException;
 /**
  * <!-- Case -->
  * 
- * A case is a single experience, comprising a {@link State} of the world, an
+ * A case is a single experience, comprising a state of the world, an
  * action taken, and an outcome
  * 
  * @author Gary Polhill
  */
-public class Case {
+public class Case implements PartiallyComparable<Case> {
 
 	private final Object state;
 
@@ -87,27 +87,6 @@ public class Case {
        return new Case( this.state, this.activity, this.outcome, this.ticks );
     }
 
-//	public boolean matches(Feature<?>.Value... queries) {
-//		for(Feature<?>.Value query : queries) {
-//			if(!state.matches(query)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//    public boolean outcomeMatches(Feature<?>.Value... queries) {
-//		for(Feature<?>.Value query : queries) {
-//			if(!outcome.matches(query)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//	public POCmp cmp(FeatureSet.Value other) {
-//		return POCmp.NO;
-//	}
 
 	@Override
 	public String toString() {
@@ -174,5 +153,10 @@ public class Case {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public PartiallyOrderedComparison relativeCompareTo(Case obj, Case referent) {
+		return PartiallyOrderedComparison.cmp(state, obj.getState(), referent.getState());
 	}
 }

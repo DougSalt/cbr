@@ -8,36 +8,19 @@ public class GetRank implements Reporter
 	public Object report(Argument[] args, Context context)
 		throws ExtensionException
 	{
-		if (args[0].get() instanceof NetLogoCaseBase)
-		{
-			if (args[1].get() instanceof NetLogoCase)
-			{
-				NetLogoCaseBase caseBase = (NetLogoCaseBase)args[0].get();
-				NetLogoCase logoCase = (NetLogoCase)args[1].get();
+		if (args[0].get() instanceof NetLogoCase) {
+			NetLogoCase logoCase = (NetLogoCase)args[0].get();
 
-				if (caseBase.contains(logoCase))
-				{
-					return String.valueOf(logoCase.getRank());
-				}
-				else
-				{
-					throw new ExtensionException("Case not found in CaseBase");
-				}
-			}
-			else
-			{
-				throw new ExtensionException("Invalid Case");
-			}
+			return logoCase.getRank();
 		}
-		else
-		{
-			throw new ExtensionException("Invalid CaseBase");
+		else {
+			throw new ExtensionException("Argument to cbr:get-rank must be a case");
 		}
 	}
 
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType()}, Syntax.NumberType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() }, Syntax.NumberType());
 	}
 }

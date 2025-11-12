@@ -2,8 +2,6 @@ import org.nlogo.api.*;
 import org.nlogo.api.Reporter;
 import org.nlogo.core.*;
 
-import java.time.*;
-
 public class AddCase implements Reporter
 {
 	@Override
@@ -23,7 +21,7 @@ public class AddCase implements Reporter
 
 			return logoCase;
 		} else {
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("First argument to cbr:add must be a case-base");
 		}
 	}
 

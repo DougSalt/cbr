@@ -1,4 +1,83 @@
-# Introduction
+# NetLogo `cbr` extension manual
+
+## Introduction
+
+This manual provides a little guidance on how to use the `cbr` extension in NetLogo models to implement a rudimentary Case-Based Reasoner (CBR) for decision-making in your models' agents.
+
+Case-Based Reasoning is an approach to decision-making that is modelled on the ways in which experts make decisions based on their experience. Essentially, they maintain an 'episodic memory' of cases, each of which stores:
+
+  1. a situation (or state of the world);
+
+  2. an activity they did in response to that situation; and
+
+  3. the outcome (or perceived outcome) of the activity.
+  
+When encountering a new situation, the expert decides what to do by comparing the outcomes of the activities they did in the cases with the most similar situations. In the symbolic AI literature, case-based reasoning is a highly sophisticated decision-making algorithm, with complicated pattern-matching algorithms capable of identifying analogous situations and mapping the analogy onto activities and potential outcomes. See [Aamodt and Plaza (1994)](https://doi.org/10.3233/AIC-1994-7104) for an overview.
+
+To our knowledge [Luis Izquierdo](https://luis.izqui.org/) was among the first to use case-based reasoning in an agent-based models. (See [Izquierdo et al. (2004)](https://www.jasss.org/7/3/1.html) and  [Izquierdo and Gotts (2006)](https://doi.org/10.1007/3-540-28547-4_14).) Other work in [_JASSS_](https://www.jasss.org/) discussing the use of case-based reasoning in agent-based models includes [Lee and Lee (2007)](https://www.jasss.org/10/2/4.html) and [Polhill et al. (2010)](https://www.jasss.org/13/2/10.html).
+
+The `cbr` extension provides functionality for storing and maintaining an episodic memory or 'case base', and querying it to find cases with the most similar situations, or, as we will refer to them, 'states'. Typical usage would entail the following to set up the agents:
+
+```NetLogo
+extensions [ cbr ]
+
+turtles-own [
+  cb               ; turtles' episodic memory
+  last-state       ; state used for most recent decision
+  last-activity    ; activity chosen
+  last-outcome     ; outcome of the activity
+  ; ... etc.
+]
+
+to setup
+  ; ...
+
+  ask turtles [
+    set cb cbr:new ; create an empty case-base
+  ]
+  
+  ; ...
+end
+```
+
+Then during `go`:
+
+```NetLogo
+
+  ; choose what to do
+
+  ask turtles [
+    set last-state expected-state
+                   ; expected-state would be a reporter
+                   ; generating an expected state of the
+                   ; world for which a decision is needed
+
+    foreach cbr:matches cb last-state [ case ->
+      ; evaluate the case to decide whether its activity
+      ; is the one we want to use. If it is, then:
+      
+      set last-activity cbr:decision case
+    ]
+  ]
+  
+  ; ... and then do it ...
+  
+  ask turtles [
+    perform last-activity
+                   ; perform would be a procedure taking
+                   ; a chosen activity and implementing it
+  ]
+  
+  ; ... and record the episode
+  
+  ask turtles [
+    set last-outcome evaluate-outcome last-activity
+                   ; evaluate-outcome would be a reporter
+                   ; returning a perceived outcome from
+                   ; the last-activity
+    cbr:add last-state last-activity last-outcome 
+  ]
+```
 
 This was the original specification for the extension. I need to review this
 and see if there is anything useful we can keep.

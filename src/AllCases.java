@@ -1,8 +1,9 @@
+import java.util.LinkedList;
+import java.util.List;
+
 import org.nlogo.api.*;
 import org.nlogo.api.Reporter;
 import org.nlogo.core.*;
-import java.util.*;
-import scala.collection.JavaConverters;
 
 public class AllCases implements Reporter
 {
@@ -13,23 +14,26 @@ public class AllCases implements Reporter
 		if (args[0].get() instanceof NetLogoCaseBase) {
 			NetLogoCaseBase caseBase = (NetLogoCaseBase) args[0].get();
 
-            //LogoList caseBaseList = caseBase.asLogoList();
-            //LogoList caseBaseList = LogoList.fromJava(Collections.emptyList());
-            LogoList caseBaseList = LogoList.Empty();
-            for (Case c : caseBase) {
-                NetLogoCase nc = (NetLogoCase)c;
-                caseBaseList = caseBaseList.lput(nc);
+			List<NetLogoCase> caseList = new LinkedList<NetLogoCase>();
+
+			for(Case c: caseBase) {
+				if(c instanceof NetLogoCase) {
+					caseList.add((NetLogoCase)c);
+				}
+				else {
+					throw new ExtensionException("BUG! Non-NetLogoCase member of NetLogoCaseBase");
+				}
             }
-		    return caseBaseList;
+		    return LogoList.fromJava(caseList);
         }
 		else {
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("Argument to cbr:all must be a case base");
 		}
 	}
 
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType()},Syntax.ListType());
+		return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() }, Syntax.ListType());
 	}
 }

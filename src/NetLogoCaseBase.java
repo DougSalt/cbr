@@ -1,61 +1,40 @@
 /**
  * 
  */
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.nlogo.api.Agent;
+import org.nlogo.api.AgentSet;
+import org.nlogo.api.AnonymousReporter;
+import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.ExtensionObject;
 import org.nlogo.core.LogoList;
 
 /**
- * @author GP40285
+ * <!-- NetLogoCaseBase -->
+ * 
+ * Provide a NetLogo `ExtensionObject` wrapper around the internal `CaseBase` class.
  *
  */
-public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
+public class NetLogoCaseBase extends CaseBase implements ExtensionObject, PartiallyOrderedComparison.Hook<Case> {
 
-	private final boolean fixedStateFeatures;
-	private final boolean fixedOutcomeFeatures;
 	
 	private final long id;
 	private static long next = 0;
 
-	private static final int CASE_LIST_SIZE = 3;
-	private static final int CASE_LIST_STATE_IX = 0;
-	private static final int CASE_LIST_ACTIVITY_IX = 1;
-	private static final int CASE_LIST_OUTCOME_IX = 2;
-	private static final int CASE_LIST_TIME_IX = 3;
+	private AnonymousReporter netLogoCaseLambda = null;
+	private Context context;
 	
 	public static final String typeName = "base";
 	
 	public NetLogoCaseBase() {
-		fixedStateFeatures = false;
-		fixedOutcomeFeatures = false;
+		super.caseLambda = new DefaultLambda(this);
 		id = next();
 	}
-	
-	public NetLogoCaseBase(boolean fixedStateFeatures, boolean fixedOutcomeFeatures) {
-		this.fixedStateFeatures = fixedStateFeatures;
-		this.fixedOutcomeFeatures = fixedOutcomeFeatures;
-		id = next();
-	}
-	
-//	public NetLogoCaseBase(NetLogoFeatureSet stateFeatures, NetLogoFeatureSet outcomeFeatures) {
-//		id = next();
-//		if(stateFeatures != null) {
-//			this.stateFeatures = stateFeatures;
-//			fixedStateFeatures = true;
-//		}
-//		else {
-//			fixedStateFeatures = false;
-//		}
-//		if(outcomeFeatures != null) {
-//			this.outcomeFeatures = outcomeFeatures;
-//			fixedOutcomeFeatures = true;
-//		}
-//		else {
-//			fixedOutcomeFeatures = false;
-//		}
-//	}
 	
 	public NetLogoCaseBase(CaseBase value) {
 		this();
@@ -64,69 +43,10 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 		}
 	}
 	
-//	public NetLogoCaseBase(String value) throws ClassNotFoundException, IOException, CaseBaseException {
-//		this(CaseBase.parseString(value));
-//	}
-
-//	public void addCase(LogoList case_list) throws ExtensionException {
-//		if(case_list.length() != CASE_LIST_SIZE) {
-//			throw new ExtensionException("A case should be initialized from a list of length " + CASE_LIST_SIZE + ": " + case_list);
-//		}
-//
-//		Object state = case_list.get(CASE_LIST_STATE_IX);
-//		if(!(state instanceof LogoList)) {
-//			throw new ExtensionException("A state in a case should be initialized from a list: " + state);
-//		}
-//
-//		Object activity = case_list.get(CASE_LIST_ACTIVITY_IX);
-//
-//		Object outcome = case_list.get(CASE_LIST_OUTCOME_IX);
-//		if(!(outcome instanceof LogoList)) {
-//			throw new ExtensionException("An outcome in a case should be initialized from a list: " + outcome);
-//		}
-//
-//        Object ticks = case_list.get(CASE_LIST_TIME_IX);
-//        if (!(ticks instanceof Number)) {
-//			throw new ExtensionException("A time in a case should be a number: " + ticks);
-//        }
-//
-//
-//		NetLogoFeatureValueSet state_fsv = (stateFeatures == null) ? NetLogoFeatureValueSet.manifest((LogoList)state)
-//				: NetLogoFeatureValueSet.manifest((LogoList)state, stateFeatures);
-//		
-//		if(stateFeatures == null && fixedStateFeatures) {
-//			stateFeatures = state_fsv.getFeatureSet();
-//		}
-//		
-//		NetLogoFeatureValueSet outcome_fsv = (outcomeFeatures == null) ? NetLogoFeatureValueSet.manifest((LogoList)outcome)
-//				: NetLogoFeatureValueSet.manifest((LogoList)outcome, outcomeFeatures);
-//		
-//		if(outcomeFeatures == null && fixedOutcomeFeatures) {
-//			outcomeFeatures = outcome_fsv.getFeatureSet();
-//		}
-//		
-//		super.add(new NetLogoCase(state_fsv, activity, outcome_fsv, ((Number)ticks).doubleValue()));
-//	}
 	
 	private static final long next() {
 		return ++next;
 	}
-
-//	public void setStateFeatures(NetLogoFeatureSet state_features) throws ExtensionException {
-//		if(stateFeatures != null && !stateFeatures.equals(state_features)) {
-//			throw new ExtensionException("You can only set the state-features of a case base once (current setting " + stateFeatures
-//					+ " -- attempted setting " + state_features + ")");
-//		}
-//		if(stateFeatures == null) stateFeatures = state_features;
-//	}
-
-//	public void setOutcomeFeatures(NetLogoFeatureSet outcome_features) throws ExtensionException {
-//		if(outcomeFeatures != null && !outcomeFeatures.equals(outcome_features)) {
-//			throw new ExtensionException("You can only set the outcome-features of a case base once (current setting " + outcomeFeatures
-//					+ " -- attempted setting " + outcome_features + ")");
-//		}
-//		if(outcomeFeatures == null) stateFeatures = outcome_features;
-//	}
 
 	public LogoList asLogoList() {
 		LogoList list = LogoList.Empty();
@@ -138,6 +58,24 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 		}
 
 		return list;
+	}
+	
+	public static NetLogoCaseBase fromLogoList(LogoList list) throws ExtensionException {
+		NetLogoCaseBase cb = new NetLogoCaseBase();
+		
+		int ix = 0;
+		for(Object o : list.javaIterable()) {
+			if(o instanceof LogoList) {
+				cb.addCase(NetLogoCase.fromLogoList((LogoList)o));
+			}
+			else {
+				throw new ExtensionException("A case base must be initialized from a list of lists. Item " +
+					ix + " of the list from which to build a case base is not a list");
+			}
+			ix++;
+		}
+		
+		return cb;
 	}
 
 	/*
@@ -191,5 +129,80 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject {
 		// N.B. Expensive computationally especially for large case bases -- O(N^2)
 		return super.equals(obj);
 	}
+
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
 	
+	@Override
+	public PartiallyOrderedComparison cmp(Case src, Case obj, Case ref) {
+		if(src instanceof NetLogoCase && obj instanceof NetLogoCase && ref instanceof NetLogoCase) {
+			return n_cmp(src.getState(), obj.getState(), ref.getState());
+		}
+		else {
+			return src.relativeCompareTo(obj, ref);
+		}
+	}
+	
+	public PartiallyOrderedComparison n_cmp(Object src, Object obj, Object ref) {
+		
+		if(netLogoCaseLambda != null) {
+			Object result = netLogoCaseLambda.report(context, new Object[] {src, obj, ref });
+			return PartiallyOrderedComparison.fromString(result.toString());
+		}
+		else if(obj.getClass().isInstance(ref) && src.getClass().isInstance(ref)) {
+			if(ref instanceof LogoList) {
+				return PartiallyOrderedComparison.cmp(((LogoList)src).toJava(), ((LogoList)obj).toJava(),((LogoList)ref).toJava());
+			}
+			else if(ref instanceof AgentSet) {
+				Set<Agent> s = new HashSet<Agent>();
+				for(Agent a: ((AgentSet)src).agents()) {
+					s.add(a);
+				}
+				Set<Agent> o = new HashSet<Agent>();
+				for(Agent a: ((AgentSet)obj).agents()) {
+					o.add(a);
+				}
+				Set<Agent> r = new HashSet<Agent>();
+				for(Agent a: ((AgentSet)ref).agents()) {
+					r.add(a);
+				}
+				return PartiallyOrderedComparison.cmp(s, o, r);
+			}
+			else if(ref instanceof Agent) {
+				if(((Agent)src).kind().equals(((Agent)ref).kind()) 
+					&& ((Agent)obj).kind().equals(((Agent)ref).kind())) {
+				
+					List<Object> s = Arrays.asList(((Agent)src).variables());
+					List<Object> o = Arrays.asList(((Agent)obj).variables());
+					List<Object> r = Arrays.asList(((Agent)ref).variables());
+					
+					return PartiallyOrderedComparison.cmp(s, o, r);
+				}
+				else if(((Agent)src).kind().equals(((Agent)ref).kind())) {
+					return PartiallyOrderedComparison.LESS_THAN;
+				}
+				else if(((Agent)obj).kind().equals(((Agent)ref).kind())) {
+					return PartiallyOrderedComparison.GREATER_THAN;
+				}
+				else {
+					return PartiallyOrderedComparison.INCOMPARABLE;
+				}
+			}
+			else {
+				return PartiallyOrderedComparison.cmp(src, obj, ref);
+			}
+		}
+		else {
+			return PartiallyOrderedComparison.INCOMPARABLE;
+		}
+		
+		
+	}
+	
+	
+	public void setCaseLambda(AnonymousReporter lambda) {
+		netLogoCaseLambda = lambda;
+	}
 }

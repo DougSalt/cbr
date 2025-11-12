@@ -17,16 +17,16 @@ public class Remove implements Command
 				caseBase.remove(logoCase);
 			}
 			else {
-				throw new ExtensionException("Invalid case");
+				throw new ExtensionException("Second argument to cbr:remove must be a case");
 			}
 		} else {
-			throw new ExtensionException("Invalid case-base");
+			throw new ExtensionException("First argument to cbr:remove must be a case base");
 		}
 	}
 
 	@Override
 	public Syntax getSyntax()
 	{
-		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType()});
+		return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType() });
 	}
 }
