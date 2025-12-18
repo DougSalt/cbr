@@ -60,13 +60,13 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject, Partia
 		return list;
 	}
 	
-	public static NetLogoCaseBase fromLogoList(LogoList list) throws ExtensionException {
+	public static NetLogoCaseBase fromLogoList(LogoList list, Context context) throws ExtensionException {
 		NetLogoCaseBase cb = new NetLogoCaseBase();
 		
 		int ix = 0;
 		for(Object o : list.javaIterable()) {
 			if(o instanceof LogoList) {
-				cb.addCase(NetLogoCase.fromLogoList((LogoList)o));
+				cb.addCase(NetLogoCase.fromLogoList((LogoList)o, context));
 			}
 			else {
 				throw new ExtensionException("A case base must be initialized from a list of lists. Item " +
@@ -151,7 +151,15 @@ public class NetLogoCaseBase extends CaseBase implements ExtensionObject, Partia
 			Object result = netLogoCaseLambda.report(context, new Object[] {src, obj, ref });
 			return PartiallyOrderedComparison.fromString(result.toString());
 		}
-		else if(obj.getClass().isInstance(ref) && src.getClass().isInstance(ref)) {
+		else {
+			return sn_cmp(src, obj, ref);
+		}
+		
+	}
+	
+	public static PartiallyOrderedComparison sn_cmp(Object src, Object obj, Object ref) {
+		if(obj.getClass().isInstance(ref) && src.getClass().isInstance(ref)) {
+		
 			if(ref instanceof LogoList) {
 				return PartiallyOrderedComparison.cmp(((LogoList)src).toJava(), ((LogoList)obj).toJava(),((LogoList)ref).toJava());
 			}

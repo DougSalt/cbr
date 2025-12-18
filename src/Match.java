@@ -22,8 +22,10 @@ public class Match implements Reporter
 			caseBase.setContext(context);	
 			
 			for(Case c: caseBase.getStateMatches(args[1].get())) {
-				if(c instanceof NetLogoCase && c.getActivity().equals(activity)) {
-					result.add((NetLogoCase)c);
+				if(c instanceof NetLogoCase) {
+					if(c.getActivity().equals(activity)) {
+						result.add((NetLogoCase)c);
+					}
 				}
 				else {
 					throw new ExtensionException("BUG! Non-NetLogoCase member of NetLogoCaseBase");

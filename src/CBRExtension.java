@@ -19,11 +19,13 @@ public class CBRExtension extends DefaultClassManager {
 
 	@Override
 	public void load(PrimitiveManager primManager) throws ExtensionException {
-		//primManager.addPrimitive("from-list", new FromList());
 		primManager.addPrimitive("new", new New());
+		primManager.addPrimitive("from-list", new FromList());
+		primManager.addPrimitive("case", new NewCase());
 		primManager.addPrimitive("add", new AddCase());
 		primManager.addPrimitive("combine", new CombineCaseBases());
 		primManager.addPrimitive("all", new AllCases());
+		primManager.addPrimitive("size", new Size());
 		primManager.addPrimitive("remove", new Remove());
 		primManager.addPrimitive("state", new State());
 		primManager.addPrimitive("decision", new Decision());
@@ -41,14 +43,17 @@ public class CBRExtension extends DefaultClassManager {
 		primManager.addPrimitive("lambda", new CaseLambda());
 		primManager.addPrimitive("match", new Match());
 		primManager.addPrimitive("matches", new Matches());
+		primManager.addPrimitive("partial-cmp", new PartialCompare());
 		primManager.addPrimitive("eq", new ComparisonResult(PartiallyOrderedComparison.EQUAL));
-		primManager.addPrimitive("eq?", new CompareBoolean(PartiallyOrderedComparison.EQUAL));
 		primManager.addPrimitive("lt",  new ComparisonResult(PartiallyOrderedComparison.LESS_THAN));
-		primManager.addPrimitive("lt?",  new CompareBoolean(PartiallyOrderedComparison.LESS_THAN));
 		primManager.addPrimitive("gt", new ComparisonResult(PartiallyOrderedComparison.GREATER_THAN));
-		primManager.addPrimitive("gt?", new CompareBoolean(PartiallyOrderedComparison.GREATER_THAN));
 		primManager.addPrimitive("incmp", new ComparisonResult(PartiallyOrderedComparison.INCOMPARABLE));
-		primManager.addPrimitive("incmp?", new CompareBoolean(PartiallyOrderedComparison.INCOMPARABLE));
+		for(PartiallyOrderedComparison poc: PartiallyOrderedComparison.values()) {
+			for(boolean mod: new boolean[] {true, false}) {
+				primManager.addPrimitive(CompareBoolean.command(poc, mod),
+						new CompareBoolean(poc, mod));
+			}
+		}
 	}
 
 	@Override

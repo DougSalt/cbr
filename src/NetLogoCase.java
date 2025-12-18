@@ -3,6 +3,7 @@
  */
 import java.util.*;
 
+import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.ExtensionObject;
 import org.nlogo.core.LogoList;
@@ -43,15 +44,15 @@ public class NetLogoCase extends Case implements ExtensionObject {
 		return list;
 	}
 	
-	public static NetLogoCase fromLogoList(LogoList list) throws ExtensionException {
-		if(list.length() < 4) {
+	public static NetLogoCase fromLogoList(LogoList list, Context context) throws ExtensionException {
+		if(list.length() < 3) {
 			throw new ExtensionException("Constructing a case from a list requires a list of length 4. List "
 				+ list.toString() + " has length " + list.length());
 		}
 		Object state = list.get(0);
 		Object activity = list.get(1);
 		Object outcome = list.get(2);
-		Object time = list.get(3);
+		Object time = (list.length() == 4) ? list.get(3) : context.world().ticks();
 		if(time instanceof Double) {
 			return new NetLogoCase(state, activity, outcome, (Double)time);
 		}

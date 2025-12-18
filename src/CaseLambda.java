@@ -21,6 +21,15 @@ public class CaseLambda implements Command
 				//TODO: We also need to do some validation of the Reporter
       	        // My feeling is we could do this with some kind of activation of
                 // the code with say 3 string cases.
+				
+				Syntax syn = reporter.syntax();
+				if(syn.allArgs().length() != 3) {
+					throw new ExtensionException("Anonymous reporter to cbr:lambda must take three arguments");
+				}
+				if(syn.ret() != Syntax.WildcardType()) {
+					throw new ExtensionException("Anonymous reporter to cbr:lambda returns the wrong thing");
+				}
+				
 				caseBase.setCaseLambda(reporter);
 			}
 			else
